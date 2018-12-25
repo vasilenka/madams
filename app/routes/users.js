@@ -68,7 +68,6 @@ router.get('/:userId', function(req, res, next) {
 router.post('/', function(req, res, next) {
 
   bcrypt.hash(req.body.password, saltRounds)
-  .then(hash => hash)
   .then(hashed => {
     let user = new User({
       _id: new mongoose.Types.ObjectId,
@@ -78,9 +77,8 @@ router.post('/', function(req, res, next) {
       lastName: req.body.lastName,
       email: req.body.email,
     })
-    return user;
+    return user.save();
   })
-  .then(user => user.save())
   .then(user => {
     if(!user) {
       Promise.reject()
