@@ -7,10 +7,28 @@ let User = require('./../models/User');
 
 router.get('/', function(req, res, next) {
   User.find()
+  .select('_id username email firstName lastName createdAt updatedAt')
   .then(users => {
     res.status(200).json({
       message: "GET request to the /users",
-      users: users
+      count: users.length,
+      users: users.map((user, index) => {
+        return {
+          ...pick(user, [
+            '_id',
+            'username',
+            'email',
+            'firstName',
+            'lastName',
+            'createdAt',
+            'updatedAt'
+          ]),
+          request: {
+            type: 'GET',
+            url: `http://localhost:5000/users/${user._id}`
+          },
+        }
+      })
     });
   })
   .catch(err => {
@@ -21,8 +39,10 @@ router.get('/', function(req, res, next) {
   })
 });
 
+
 router.get('/:userId', function(req, res, next) {
   User.findById(req.params.userId)
+  .select('_id username email firstName lastName createdAt updatedAt')
   .then(user => {
     if(!user) {
       Promise.reject()
@@ -40,16 +60,18 @@ router.get('/:userId', function(req, res, next) {
   });
 });
 
+
 router.post('/', function(req, res, next) {
+
   let user = new User({
     _id: new mongoose.Types.ObjectId,
     username: req.body.username,
+    password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
   })
+
   user.save()
   .then(user => {
     if(!user) {
@@ -57,7 +79,21 @@ router.post('/', function(req, res, next) {
     }
     res.status(201).json({
       message: 'Success creating new user!',
-      user: user
+      user: {
+        ...pick(user, [
+          '_id',
+          'username',
+          'email',
+          'firstName',
+          'lastName',
+          'createdAt',
+          'updatedAt'
+        ]),
+        request: {
+          type: 'GET',
+          url: `http://localhost:5000/users/${user._id}`
+        }
+      }
     })
   })
   .catch(err => {
@@ -67,6 +103,7 @@ router.post('/', function(req, res, next) {
     })
   })
 });
+
 
 router.patch('/:userId', (req, res, next) => {
   let props = pick(req.body, ['username', 'email', 'firstName', 'lastName']);
@@ -86,8 +123,8 @@ router.patch('/:userId', (req, res, next) => {
       error: err
     })
   })
-
 })
+
 
 router.delete('/:userId', function(req, res, next) {
   let query = req.params.userId;
@@ -105,7 +142,6 @@ router.delete('/:userId', function(req, res, next) {
       error: err
     })
   })
-
 });
 
 module.exports = router;

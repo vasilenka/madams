@@ -10,6 +10,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`, {
   useNewUrlParser: true
 }).catch(err => console.log(err))
+mongoose.Promise = global.Promise;
 
 // Ignite the App
 const app = express();
