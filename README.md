@@ -44,6 +44,7 @@ GET /users
 ```
 This will response with object with key `message`, `count`, and `users` consist of an array of all users information stored in database.
 ```
+javascript
 [
   message: String,
   count: Number, // The count of all users stored in database
@@ -67,6 +68,7 @@ GET /users/:userId
 ```
 This request will response with an object consist of a single user data.
 ```
+javascript
 [
   message: String,
   {
@@ -89,6 +91,7 @@ POST /users
 ```
 The endpoint expecting the follwoing values sent as json in the request:
 ```
+javascript
 {
   username: String // required,
   email: String // required,
@@ -100,6 +103,7 @@ The endpoint expecting the follwoing values sent as json in the request:
 ```
 If the new user created, this request will send a response with an object consist of the user data that just been created.
 ```
+javascript
 [
   message: String,
   {
@@ -122,6 +126,7 @@ PATCH /users/:userId
 ```
 You can send any of the following values as `JSON` to the endpoint:
 ```
+javascript
 {
   username: String,
   email: String,
@@ -133,6 +138,7 @@ You can send any of the following values as `JSON` to the endpoint:
 ```
 This request will response with `message` and an object consist of a the user that has been deleted.
 ```
+javascript
 [
   message: String,
   {
@@ -154,6 +160,7 @@ DELETE /users/:userId
 ```
 This request will response with `message` and an object consist of a the user that has been deleted.
 ```
+javascript
 [
   message: String,
   {
@@ -178,6 +185,7 @@ GET /projects
 ```
 This will response with object with key `message`, `count`, and `users` consist of an array of all users information stored in database.
 ```
+javascript
 [
   message: String,
   count: Number, // The count of all projects stored in database
@@ -201,6 +209,7 @@ GET /users/:projectId
 ```
 This request will response with an object consist of a single project data.
 ```
+javascript
 [
   message: String,
   {
@@ -223,6 +232,7 @@ POST /projects
 ```
 The endpoint expecting the follwoing values sent as json in the request:
 ```
+javascript
 {
   _id: ObjectID,
   name: String, // required
@@ -234,6 +244,7 @@ The endpoint expecting the follwoing values sent as json in the request:
 ```
 If the new project successfully created, this request will send a response with an object consist of the project data that just been created.
 ```
+javascript
 [
   message: String,
   {
@@ -256,6 +267,7 @@ PATCH /projects/:projectId
 ```
 You can send any of the following values as `JSON` to the endpoint:
 ```
+javascript
 {
   name: String, // Project name
   teams: Array of Users, // Every team member that involved in the project
@@ -266,6 +278,7 @@ You can send any of the following values as `JSON` to the endpoint:
 ```
 This request will response with `message` and an object consist of a the projects that has been updated.
 ```
+javascript
 [
   message: String,
   {
@@ -288,6 +301,7 @@ DELETE /projects/:projectId
 ```
 This request will response with `message` and an object consist of a the project that has been deleted.
 ```
+javascript
 [
   message: String,
   {
