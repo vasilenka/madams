@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pick = require('lodash.pick');
+const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
 
 let Project = require('./../models/Project');
@@ -17,6 +18,7 @@ router.get('/', function(req, res, next) {
     let projectData = projects.map(project => {
       return {
         ...pick(project, [
+          '_id',
           'name',
           'teams',
           'tags',
@@ -40,6 +42,56 @@ router.get('/', function(req, res, next) {
     })
   })
 });
+
+
+router.get('/:projectId', (req, res, next) => {
+  let query = req.params.projectId;
+  Project.findById(query)
+    .select('_id name teams tags startDate endDate createdAt updatedAt')
+    .then(project => {
+
+      if(!project) {
+        res.status(404).json({
+          message: "Unable to get project with provided projectId"
+        })
+      }
+
+      let projectData = pick(project, [
+        '_id',
+        'name',
+        'teams',
+        'tags',
+        'startDate',
+        'endDate',
+        'createdAt',
+        'updatedAt',
+      ])
+      res.status(200).json({
+        message: 'GET request to project/:projectId',
+        project: {
+          ...projectData,
+          teams: project.teams.map(team => {
+            return {
+              teamId: team,
+              request: {
+                type: 'GET',
+                url: `http://localhost:5000/users/${team}`
+              }
+            }
+          }),
+        }
+      })
+
+    })
+    .catch(err => {
+      console.log(err);
+      res.send(500).json({
+        message: 'Unable to fetch project data',
+        error: err
+      })
+    })
+})
+
 
 router.post('/', function(req, res, next) {
   let project = new Project({
@@ -89,5 +141,67 @@ router.post('/', function(req, res, next) {
     })
   });
 });
+
+router.patch('/:projectId', (req, res, next) => {
+  let query = req.params.projectId;
+  let projectData = pick(req.body, [
+    'name',
+    'teams',
+    'tags',
+    'startDate',
+    'endDate',
+  ])
+  if(empty(projectData)) {
+    res.status(304).json({
+      message: "No project's data modified",
+      project: null,
+    })
+  }
+  projectData.updatedAt = Date.now();
+  Project.findByIdAndUpdate(query, {$set: projectData}, {new: true})
+  .then(project => {
+    res.status(200).json({
+      message: "Project data updated successfully!",
+      project: project
+    })
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({
+      message: 'Unable to update project\'s data',
+      error: err
+    })
+  })
+})
+
+
+router.delete('/:projectId', (req, res, next) => {
+  let query = req.params.projectId;
+  Project.findByIdAndDelete(query)
+  .select('_id name teams tags startDate endDate createdAt updatedAt')
+  .then(project => {
+    res.status(200).json({
+      message: 'Project deleted successfully!',
+      project: {
+        ...pick(project, [
+          '_id',
+          'name',
+          'teams',
+          'tags',
+          'startDate',
+          'endDate',
+          'createdAt',
+          'updatedAt'
+        ])
+      }
+    })
+  })
+  .catch(err => {
+    res.status(500).json({
+      message: 'Unable to delete project',
+      error: err
+    })
+  })
+})
 
 module.exports = router;
