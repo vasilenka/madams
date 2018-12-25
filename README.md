@@ -2,6 +2,21 @@ The Madams
 ======
 This is The Madams API built using express.js
 
+## Table of Contents
+1. [Usage](https://github.com/vasilenka/madams-express#usage)
+2. [Users Endpoint](https://github.com/vasilenka/madams-express#users-endpoint)
+  * [Get all users](https://github.com/vasilenka/madams-express#get-all-users)
+  * [Get single user data](https://github.com/vasilenka/madams-express#get-single-user-data)
+  * [Create new user](https://github.com/vasilenka/madams-express#create-new-user)
+  * [Update single user data](https://github.com/vasilenka/madams-express#update-single-user-data)
+  * [Delete single user data](https://github.com/vasilenka/madams-express#delete-single-user-data)
+3. [Projects Endpoint](https://github.com/vasilenka/madams-express#projects-endpoint)
+  * [Get all projects](https://github.com/vasilenka/madams-express#get-all-projects)
+  * [Get single project data](https://github.com/vasilenka/madams-express#get-single-project-data)
+  * [Create new project](https://github.com/vasilenka/madams-express#create-new-project)
+  * [Update single project data](https://github.com/vasilenka/madams-express#update-single-project-data)
+  * [Delete single project data](https://github.com/vasilenka/madams-express#delete-single-project-data)
+
 ## Usage
 ### Setup the app
 1. Clone this repository to your local machine.
@@ -16,11 +31,7 @@ After setting up your database, add new `nodemon.json` file on your root folder 
 In your terminal, navigate to the the madams directory (if you are not in it already) and run the app using `npm start` or `yarn start`. If everything's good, your app will running on [http://localhost:5000](http://localhost:5000 "localhost:5000")
 
 
-# Endpoint
-======
-
-## Users
-------
+## Users Endpoint
 ### Get all users
 To get all users stored in database, send `GET` request to `/users`
 ```
@@ -45,9 +56,9 @@ This will response with object with key `message`, `count`, and `users` consist 
 ```
 
 ### Get single user data
-To get single user data, send `GET` request to `/users/:id` with `id` is the requested user id as request parameter.
+To get single user data, send `GET` request to `/users/:userId` with `userId` is the requested user id as request parameter.
 ```
-GET /users/:id
+GET /users/:userId
 ```
 This request will response with an object consist of a single user data.
 ```
@@ -100,9 +111,9 @@ If the new user created, this request will send a response with an object consis
 ```
 
 ### Update single user data
-To update single user data, send `PATCH` request to `/users/:id` with `id` is the requested user id as request parameter.
+To update single user data, send `PATCH` request to `/users/:userId` with `userId` is the requested user id as request parameter.
 ```
-PATCH /users/:id
+PATCH /users/:userId
 ```
 You can send any of the following values as `JSON` to the endpoint:
 ```
@@ -132,9 +143,9 @@ This request will response with `message` and an object consist of a the user th
 ```
 
 ### Delete single user data
-To delete single user data, send `DELETE` request to `/users/:id` with `id` is the requested user id as request parameter.
+To delete single user data, send `DELETE` request to `/users/:userId` with `userId` is the requested user id as request parameter.
 ```
-DELETE /users/:id
+DELETE /users/:userId
 ```
 This request will response with `message` and an object consist of a the user that has been deleted.
 ```
@@ -153,7 +164,6 @@ This request will response with `message` and an object consist of a the user th
 ```
 
 ## Projects
-------
 ### Get all projects
 To get all projects stored in database, send `GET` request to `/projects`
 ```
