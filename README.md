@@ -5,19 +5,20 @@ This is The Madams API built using express.js
 ## Table of Contents
 1. [Usage](https://github.com/vasilenka/madams-express#usage)
 2. [Users Endpoint](https://github.com/vasilenka/madams-express#users-endpoint)
-  * [Get all users](https://github.com/vasilenka/madams-express#get-all-users)
-  * [Get single user data](https://github.com/vasilenka/madams-express#get-single-user-data)
-  * [Create new user](https://github.com/vasilenka/madams-express#create-new-user)
-  * [Update single user data](https://github.com/vasilenka/madams-express#update-single-user-data)
-  * [Delete single user data](https://github.com/vasilenka/madams-express#delete-single-user-data)
+      * [Get all users](https://github.com/vasilenka/madams-express#get-all-users)
+      * [Get single user data](https://github.com/vasilenka/madams-express#get-single-user-data)
+      * [Create new user](https://github.com/vasilenka/madams-express#create-new-user)
+      * [Update single user data](https://github.com/vasilenka/madams-express#update-single-user-data)
+      * [Delete single user data](https://github.com/vasilenka/madams-express#delete-single-user-data)
 3. [Projects Endpoint](https://github.com/vasilenka/madams-express#projects-endpoint)
-  * [Get all projects](https://github.com/vasilenka/madams-express#get-all-projects)
-  * [Get single project data](https://github.com/vasilenka/madams-express#get-single-project-data)
-  * [Create new project](https://github.com/vasilenka/madams-express#create-new-project)
-  * [Update single project data](https://github.com/vasilenka/madams-express#update-single-project-data)
-  * [Delete single project data](https://github.com/vasilenka/madams-express#delete-single-project-data)
+      * [Get all projects](https://github.com/vasilenka/madams-express#get-all-projects)
+      * [Get single project data](https://github.com/vasilenka/madams-express#get-single-project-data)
+      * [Create new project](https://github.com/vasilenka/madams-express#create-new-project)
+      * [Update single project data](https://github.com/vasilenka/madams-express#update-single-project-data)
+      * [Delete single project data](https://github.com/vasilenka/madams-express#delete-single-project-data)
+4. [Contributing to this repository](https://github.com/vasilenka/madams-express#contributing-to-this-repository)
 
-## Usage
+# Usage
 ### Setup the app
 1. Clone this repository to your local machine.
 2. Open your terminal/console and run `npm install` or `yarn install` if you prefer using `yarn` to install all the project dependencies.
@@ -31,7 +32,7 @@ After setting up your database, add new `nodemon.json` file on your root folder 
 In your terminal, navigate to the the madams directory (if you are not in it already) and run the app using `npm start` or `yarn start`. If everything's good, your app will running on [http://localhost:5000](http://localhost:5000 "localhost:5000")
 
 
-## Users Endpoint
+# Users Endpoint
 ### Get all users
 To get all users stored in database, send `GET` request to `/users`
 ```
@@ -163,7 +164,7 @@ This request will response with `message` and an object consist of a the user th
 ]
 ```
 
-## Projects
+# Projects
 ### Get all projects
 To get all projects stored in database, send `GET` request to `/projects`
 ```
@@ -295,3 +296,8 @@ This request will response with `message` and an object consist of a the project
   }
 ]
 ```
+
+
+# Contributing to this repository
+We'll be happy if you want to contribute to this projects. Just fork this repository and submit a pull request (PR).
+If you find something wrong or you want to give us some feedback, don't be shy to file an issue.
