@@ -25,7 +25,7 @@ const projectSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["lead", "proposal", "development", "hold", "done", "dropped"],
+    enum: ["lead", "proposal", "canceled", "development", "hold", "done", "dropped"],
     default: "lead",
     lowercase: true,
   },
