@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
           '_id',
           'name',
           'teams',
+          'status',
           'tags',
           'startDate',
           'endDate',
@@ -47,7 +48,7 @@ router.get('/', function(req, res, next) {
 router.get('/:projectId', (req, res, next) => {
   let query = req.params.projectId;
   Project.findById(query)
-    .select('_id name teams tags startDate endDate createdAt updatedAt')
+    .select('_id name teams status tags startDate endDate createdAt updatedAt')
     .then(project => {
 
       if(!project) {
@@ -61,6 +62,7 @@ router.get('/:projectId', (req, res, next) => {
         'name',
         'teams',
         'tags',
+        'status',
         'startDate',
         'endDate',
         'createdAt',
@@ -99,6 +101,7 @@ router.post('/', function(req, res, next) {
     ...pick(req.body, [
       'name',
       'teams',
+      'status',
       'tags',
       'startDate',
       'endDate',
@@ -126,6 +129,7 @@ router.post('/', function(req, res, next) {
           'name',
           'tags',
           'startDate',
+          'status',
           'endDate',
           'createdAt',
           'updatedAt',
@@ -147,6 +151,7 @@ router.patch('/:projectId', (req, res, next) => {
   let projectData = pick(req.body, [
     'name',
     'teams',
+    'status',
     'tags',
     'startDate',
     'endDate',
@@ -188,6 +193,7 @@ router.delete('/:projectId', (req, res, next) => {
           'name',
           'teams',
           'tags',
+          'status',
           'startDate',
           'endDate',
           'createdAt',

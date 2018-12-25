@@ -23,6 +23,12 @@ const projectSchema = mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+  status: {
+    type: String,
+    enum: ["lead", "proposal", "development", "hold", "done", "dropped"],
+    default: "lead",
+    lowercase: true,
+  },
   createdAt: {
     type:Date,
     default: Date.now,
