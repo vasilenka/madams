@@ -2,8 +2,15 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
+// Connect to Database
+mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`, {
+  useNewUrlParser: true
+}).catch(err => console.log(err))
+
+// Ignite the App
 const app = express();
 
 // Middlewares
