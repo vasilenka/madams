@@ -32,14 +32,15 @@ const userSchema = mongoose.Schema({
     type: String,
     trim: true,
     lowercase: true,
-    required: true,
   },
   lastName: {
     type: String,
     trim: true,
     lowercase: true,
-    required: true,
   },
+  tokens: [{
+    type: String,
+  }],
   role: [{
     type: String,
     trim: true

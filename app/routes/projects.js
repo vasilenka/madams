@@ -100,6 +100,7 @@ router.post('/', function(req, res, next) {
   });
 
   project.save()
+  .populate('teams')
   .then(project => {
     if(!project) {
       Promise.reject();
@@ -146,6 +147,7 @@ router.patch('/:projectId', (req, res, next) => {
   }
   projectData.updatedAt = Date.now();
   Project.findByIdAndUpdate(query, {$set: projectData}, {new: true})
+  .populate('teams')
   .then(project => {
     res.status(200).json({
       message: "Project data updated successfully!",
@@ -166,6 +168,7 @@ router.delete('/:projectId', (req, res, next) => {
   let query = req.params.projectId;
   Project.findByIdAndDelete(query)
   .select('_id name teams tags startDate endDate createdAt updatedAt')
+  .populate('teams')
   .then(project => {
     res.status(200).json({
       message: 'Project deleted successfully!',

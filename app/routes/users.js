@@ -1,6 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const pick = require('lodash.pick');
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 let router = express.Router();
 
 let User = require('./../models/User');
@@ -63,16 +67,20 @@ router.get('/:userId', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
-  let user = new User({
-    _id: new mongoose.Types.ObjectId,
-    username: req.body.username,
-    password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
+  bcrypt.hash(req.body.password, saltRounds)
+  .then(hash => hash)
+  .then(hashed => {
+    let user = new User({
+      _id: new mongoose.Types.ObjectId,
+      username: req.body.username,
+      password: hashed,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+    })
+    return user;
   })
-
-  user.save()
+  .then(user => user.save())
   .then(user => {
     if(!user) {
       Promise.reject()
