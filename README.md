@@ -188,7 +188,7 @@ This will response with object with key `message`, `count`, and `users` consist 
     name: String, // Project name
     teams: Array of Users, // Every team member that involved in the project
     tags: Array of String,
-    status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+    status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
     startDate: Date, // The date the project officially started
     endDate: Date, // The date the project officially ended
     createdAt: Date,
@@ -211,7 +211,7 @@ This request will response with an object consist of a single project data.
     name: String, // Project name
     teams: Array of Users, // Every team member that involved in the project
     tags: Array of String,
-    status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+    status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
     startDate: Date, // The date the project officially started
     endDate: Date, // The date the project officially ended
     createdAt: Date,
@@ -232,7 +232,7 @@ The endpoint expecting the follwoing values sent as json in the request:
   name: String, // required
   teams: Array of Users,
   tags: Array of String,
-  status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+  status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
   startDate: Date,
   endDate: Date,
 }
@@ -246,7 +246,7 @@ If the new project successfully created, this request will send a response with 
     name: String, // Project name
     teams: Array of Users, // Every team member that involved in the project
     tags: Array of String,
-    status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+    status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
     startDate: Date, // The date the project officially started
     endDate: Date, // The date the project officially ended
     createdAt: Date,
@@ -266,7 +266,7 @@ You can send any of the following values as `JSON` to the endpoint:
   name: String, // Project name
   teams: Array of Users, // Every team member that involved in the project
   tags: Array of String,
-  status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+  status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
   startDate: Date, // The date the project officially started
   endDate: Date, // The date the project officially ended
 }
@@ -280,7 +280,7 @@ This request will response with `message` and an object consist of a the project
     name: String, // Project name
     teams: Array of Users, // Every team member that involved in the project
     tags: Array of String,
-    status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+    status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
     startDate: Date, // The date the project officially started
     endDate: Date, // The date the project officially ended
     createdAt: Date,
@@ -303,7 +303,7 @@ This request will response with `message` and an object consist of a the project
     name: String, // Project name
     teams: Array of Users, // Every team member that involved in the project
     tags: Array of String,
-    status: enum[String] // ["lead", "proposal", "canceled", "development", "hold", "done", "drop"] -- default to "lead"
+    status: enum[String] // ["lead", "proposal", "cancelled", "development", "hold", "done", "drop"] -- default to "lead"
     startDate: Date, // The date the project officially started
     endDate: Date, // The date the project officially ended
     createdAt: Date,
