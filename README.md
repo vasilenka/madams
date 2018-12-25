@@ -43,8 +43,7 @@ To get all users stored in database, send `GET` request to `/users`
 GET /users
 ```
 This will response with object with key `message`, `count`, and `users` consist of an array of all users information stored in database.
-```
-javascript
+```javascript
 [
   message: String,
   count: Number, // The count of all users stored in database
@@ -67,8 +66,7 @@ To get single user data, send `GET` request to `/users/:userId` with `userId` is
 GET /users/:userId
 ```
 This request will response with an object consist of a single user data.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -90,8 +88,7 @@ To create new user, send `POST` request to `/users`.
 POST /users
 ```
 The endpoint expecting the follwoing values sent as json in the request:
-```
-javascript
+```javascript
 {
   username: String // required,
   email: String // required,
@@ -102,8 +99,7 @@ javascript
 }
 ```
 If the new user created, this request will send a response with an object consist of the user data that just been created.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -125,8 +121,7 @@ To update single user data, send `PATCH` request to `/users/:userId` with `userI
 PATCH /users/:userId
 ```
 You can send any of the following values as `JSON` to the endpoint:
-```
-javascript
+```javascript
 {
   username: String,
   email: String,
@@ -137,8 +132,7 @@ javascript
 }
 ```
 This request will response with `message` and an object consist of a the user that has been deleted.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -159,8 +153,7 @@ To delete single user data, send `DELETE` request to `/users/:userId` with `user
 DELETE /users/:userId
 ```
 This request will response with `message` and an object consist of a the user that has been deleted.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -184,8 +177,7 @@ To get all projects stored in database, send `GET` request to `/projects`
 GET /projects
 ```
 This will response with object with key `message`, `count`, and `users` consist of an array of all users information stored in database.
-```
-javascript
+```javascript
 [
   message: String,
   count: Number, // The count of all projects stored in database
@@ -208,8 +200,7 @@ To get single project data, send `GET` request to `/projects/:projectId` with `p
 GET /users/:projectId
 ```
 This request will response with an object consist of a single project data.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -231,8 +222,7 @@ To create new project, send `POST` request to `/projects`
 POST /projects
 ```
 The endpoint expecting the follwoing values sent as json in the request:
-```
-javascript
+```javascript
 {
   _id: ObjectID,
   name: String, // required
@@ -243,8 +233,7 @@ javascript
 }
 ```
 If the new project successfully created, this request will send a response with an object consist of the project data that just been created.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -266,8 +255,7 @@ To update single project data, send `PATCH` request to `/projects/:projectId` wi
 PATCH /projects/:projectId
 ```
 You can send any of the following values as `JSON` to the endpoint:
-```
-javascript
+```javascript
 {
   name: String, // Project name
   teams: Array of Users, // Every team member that involved in the project
@@ -277,8 +265,7 @@ javascript
 }
 ```
 This request will response with `message` and an object consist of a the projects that has been updated.
-```
-javascript
+```javascript
 [
   message: String,
   {
@@ -300,8 +287,7 @@ To delete single project data, send `DELETE` request to `/projects/:projectId` w
 DELETE /projects/:projectId
 ```
 This request will response with `message` and an object consist of a the project that has been deleted.
-```
-javascript
+```javascript
 [
   message: String,
   {
