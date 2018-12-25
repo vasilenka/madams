@@ -2,6 +2,7 @@ The Madams
 ======
 This is The Madams API built using express.js
 
+
 ## Table of Contents
 1. [Usage](https://github.com/vasilenka/madams-express#usage)
 2. [Users Endpoint](https://github.com/vasilenka/madams-express#users-endpoint)
@@ -18,6 +19,8 @@ This is The Madams API built using express.js
       * [Delete single project data](https://github.com/vasilenka/madams-express#delete-single-project-data)
 4. [Contributing to this repository](https://github.com/vasilenka/madams-express#contributing-to-this-repository)
 
+
+
 # Usage
 ### Setup the app
 1. Clone this repository to your local machine.
@@ -30,6 +33,7 @@ After setting up your database, add new `nodemon.json` file on your root folder 
 
 ### Running the App
 In your terminal, navigate to the the madams directory (if you are not in it already) and run the app using `npm start` or `yarn start`. If everything's good, your app will running on [http://localhost:5000](http://localhost:5000 "localhost:5000")
+
 
 
 # Users Endpoint
@@ -164,6 +168,8 @@ This request will response with `message` and an object consist of a the user th
 ]
 ```
 
+
+
 # Projects
 ### Get all projects
 To get all projects stored in database, send `GET` request to `/projects`
@@ -296,6 +302,7 @@ This request will response with `message` and an object consist of a the project
   }
 ]
 ```
+
 
 
 # Contributing to this repository
