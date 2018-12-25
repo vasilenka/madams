@@ -8,21 +8,21 @@ const projectSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  teams: {
-    type: [ObjectId],
+  teams: [{
+    type: ObjectId,
     ref: 'User'
-  },
+  }],
   startDate: {
     type: Date,
   },
   endDate: {
     type: Date,
   },
-  tags: {
-    type: [String],
+  tags: [{
+    type: String,
     trim: true,
     lowercase: true,
-  },
+  }],
   status: {
     type: String,
     enum: ["lead", "proposal", "canceled", "development", "hold", "done", "dropped"],

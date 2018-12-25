@@ -9,6 +9,7 @@ let Project = require('./../models/Project');
 router.get('/', function(req, res, next) {
   Project.find()
   .select('_id name teams tags startDate endDate createdAt updatedAt')
+  .populate('teams')
   .then(projects => {
     if(projects.length === 0) {
       res.status(200).json({
@@ -49,6 +50,7 @@ router.get('/:projectId', (req, res, next) => {
   let query = req.params.projectId;
   Project.findById(query)
     .select('_id name teams status tags startDate endDate createdAt updatedAt')
+    .populate('teams')
     .then(project => {
 
       if(!project) {
@@ -70,18 +72,7 @@ router.get('/:projectId', (req, res, next) => {
       ])
       res.status(200).json({
         message: 'GET request to project/:projectId',
-        project: {
-          ...projectData,
-          teams: project.teams.map(team => {
-            return {
-              teamId: team,
-              request: {
-                type: 'GET',
-                url: `http://localhost:5000/users/${team}`
-              }
-            }
-          }),
-        }
+        project: projectData,
       })
 
     })
@@ -115,26 +106,17 @@ router.post('/', function(req, res, next) {
     }
     res.status(200).json({
       message: "POST request to the /projects",
-      project: {
-        teams: project.teams.map(team => {
-          return {
-            teamId: team,
-            request: {
-              type: 'GET',
-              url: `http://localhost:5000/users/${team}`
-            }
-          }
-        }),
-        ...pick(project, [
-          'name',
-          'tags',
-          'startDate',
-          'status',
-          'endDate',
-          'createdAt',
-          'updatedAt',
-        ])
-      },
+      project: pick(project, [
+        '_id',
+        'name',
+        'teams',
+        'tags',
+        'startDate',
+        'status',
+        'endDate',
+        'createdAt',
+        'updatedAt',
+      ]),
     });
   })
   .catch(err => {
