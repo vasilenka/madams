@@ -1,4 +1,4 @@
-The Madams
+The Madams 💃🏼
 ======
 This is The Madams API built using express.js
 
@@ -32,7 +32,9 @@ We are using mongodb atlas as development database, to get your own free cloud a
 After setting up your database, add new `nodemon.json` file on your root folder and copy the value in `nodemon.example.json` and add your database configuration value.
 
 ### Running the App
-In your terminal, navigate to the the madams directory (if you are not in it already) and run the app using `npm start` or `yarn start`. If everything's good, your app will running on [http://localhost:5000](http://localhost:5000 "localhost:5000")
+In your terminal, navigate to the the madams directory (if you are not in it already) and run the app using `npm run dev` or `yarn dev`. If everything's good, your app will running on [http://localhost:5000](http://localhost:5000 "localhost:5000")
+
+`npm run dev` will start a nodemon server where the server will automatically reload when there's changes in your code. You can run `npm start` or `yarn start` if you want to start server without `nodemon`.
 
 
 
