@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
 // Connect to Database
+mongoose.set('useFindAndModify', false);
 mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`, {
   useNewUrlParser: true
 }).catch(err => console.log(err))
@@ -18,7 +19,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app/public')));
 
 // Allow CORS
 app.use((req, res, next) => {
