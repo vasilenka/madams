@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const pick = require('lodash.pick');
 
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -12,47 +14,139 @@ const userSchema = mongoose.Schema({
     trim: true,
     lowercase: true,
     validate: {
-      validator: email => validator.isEmail(email),
-      message: props => `${props.value} is not a valid email`,
+      validator: validator.isEmail,
+      message: props => '{VALUE} is not a valid email'
     }
   },
   username: {
     type: String,
     trim: true,
     required: true,
-    unique: true,
+    unique: true
   },
   password: {
-    minlength: [8, "Password minimum length is 8 characters"],
+    minlength: [8, 'Password minimum length is 8 characters'],
     trim: true,
     required: true,
-    type: String,
+    type: String
   },
   firstName: {
     type: String,
     trim: true,
-    lowercase: true,
+    lowercase: true
   },
   lastName: {
     type: String,
     trim: true,
-    lowercase: true,
+    lowercase: true
   },
-  tokens: [{
-    type: String,
-  }],
-  role: [{
-    type: String,
-    trim: true
-  }],
+  tokens: [
+    {
+      access: {
+        type: String,
+        lowercase: true,
+        trim: true
+      },
+      token: {
+        type: String
+      }
+    }
+  ],
+  role: [
+    {
+      type: String,
+      trim: true
+    }
+  ],
   createdAt: {
-    type:Date,
-    default: Date.now,
+    type: Date,
+    default: Date.now
   },
   updatedAt: {
-    type:Date,
-    default: Date.now,
-  },
+    type: Date,
+    default: Date.now
+  }
 });
+
+userSchema.methods.toJSON = function() {
+  let user = this;
+  let userObject = user.toObject();
+  return pick(userObject, [
+    '_id',
+    'email',
+    'username',
+    'tokens',
+    'firstName',
+    'lastName',
+    'role',
+    'createdAt',
+    'updatedAt'
+  ]);
+};
+
+userSchema.methods.removeToken = function(token) {
+  let user = this;
+  return user.update({
+    $pull: {
+      tokens: {
+        token
+      }
+    }
+  });
+};
+
+userSchema.methods.generateAuthToken = function() {
+  let user = this;
+  let access = 'auth';
+
+  let token = jwt.sign(
+    {
+      _id: user._id.toHexString(),
+      access,
+      email: user.email,
+      username: user.username
+    },
+    process.env.SECRET_SAUCE,
+    { expiresIn: '30 days' }
+  );
+
+  user.tokens = user.tokens.concat([{ access, token }]);
+  return user.save().then(user => {
+    return { user, token };
+  });
+};
+
+userSchema.methods.isTokenExist = function() {
+  let user = this;
+
+  let existingToken = user.tokens.filter(
+    token =>
+      token.access === 'auth' &&
+      jwt.verify(token.token, process.env.SECRET_SAUCE)
+  );
+
+  if (existingToken.length > 0) {
+    user.tokenExist = true;
+  }
+
+  return user;
+};
+
+userSchema.statics.findByToken = function(token) {
+  let User = this;
+  let decoded;
+
+  try {
+    decoded = jwt.verify(token, process.env.SECRET_SAUCE);
+  } catch (err) {
+    return Promise.reject();
+  }
+
+  return User.findOne({
+    _id: decoded._id,
+    'tokens.access': 'auth',
+    'tokens.token': token
+  });
+};
 
 module.exports = mongoose.model('User', userSchema);

@@ -2,8 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const pick = require('lodash.pick');
 
-const compare = require('./../middleware/auth-compare');
-const authenticate = require('./../middleware/authenticate');
+const compare = require('../middleware/auth/compare-hash');
+const tokenAuth = require('../middleware/auth/token-authentication');
+const checkEmail = require('../middleware/auth/check-email');
+const hash = require('../middleware/auth/hash');
+const credentialsAuth = require('../middleware/auth/credentials-authentication');
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -14,22 +17,13 @@ let User = require('./../models/User');
 
 router.get('/', (req, res, next) => {
   User.find()
-    .select('_id username email firstName lastName createdAt updatedAt')
     .then(users => {
       res.status(200).json({
         message: 'GET request to the /users',
         count: users.length,
-        users: users.map((user, index) => {
+        users: users.map(user => {
           return {
-            ...pick(user, [
-              '_id',
-              'username',
-              'email',
-              'firstName',
-              'lastName',
-              'createdAt',
-              'updatedAt'
-            ]),
+            ...user.toJSON(),
             request: {
               type: 'GET',
               url: `http://localhost:5000/users/${user._id}`
@@ -48,7 +42,6 @@ router.get('/', (req, res, next) => {
 
 router.get('/:userId', (req, res, next) => {
   User.findById(req.params.userId)
-    .select('_id username email firstName lastName createdAt updatedAt')
     .then(user => {
       if (!user) {
         Promise.reject();
@@ -66,48 +59,41 @@ router.get('/:userId', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
-  let query = { email: req.body.email };
-  User.findOne(query)
-    .then(user => {
-      if (user) {
-        Promise.reject();
-      }
-      return bcrypt.hash(req.body.password, saltRounds);
-    })
-    .then(hashed => {
-      let user = new User({
-        _id: new mongoose.Types.ObjectId(),
-        username: req.body.username,
-        password: hashed,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email
-      });
-      return user.save();
-    })
+router.post('/', checkEmail, hash, (req, res, next) => {
+  if (req.body.emailExist) {
+    return res.status(409).json({
+      message: `Email already exist`
+    });
+  }
+
+  let user = new User({
+    _id: new mongoose.Types.ObjectId(),
+    ...pick(req.body, [
+      'email',
+      'username',
+      'password',
+      'firstName',
+      'lastName',
+      'role'
+    ])
+  });
+
+  user
+    .save()
     .then(user => {
       if (!user) {
-        Promise.reject();
+        return Promise.reject();
       }
-      res.status(201).json({
-        message: 'Success creating new user!',
-        user: {
-          ...pick(user, [
-            '_id',
-            'username',
-            'email',
-            'firstName',
-            'lastName',
-            'createdAt',
-            'updatedAt'
-          ]),
-          request: {
-            type: 'GET',
-            url: `http://localhost:5000/users/${user._id}`
-          }
-        }
-      });
+      return user.generateAuthToken();
+    })
+    .then(result => {
+      res
+        .status(201)
+        .header('Authorization', result.token)
+        .json({
+          message: 'Success creating new user!',
+          user: result.user
+        });
     })
     .catch(err => {
       res.status(500).json({
@@ -133,10 +119,10 @@ router.patch('/:userId', async (req, res, next) => {
 
   User.findByIdAndUpdate(query, { $set: props }, { new: true })
     .select('_id username email firstName lastName createdAt updatedAt role')
-    .then(result => {
+    .then(user => {
       res.status(200).json({
         message: 'User successfully updated!',
-        user: result
+        user: user
       });
     })
     .catch(err => {
@@ -147,10 +133,40 @@ router.patch('/:userId', async (req, res, next) => {
     });
 });
 
-router.post('/login', compare, authenticate, async (req, res, next) => {
-  res.status(200).json({
-    password: req.body.password
-  });
+router.post('/login', credentialsAuth, async (req, res, next) => {
+  if (!req.body.token) {
+    return res.status(401).json({
+      message: 'Authentication failed!'
+    });
+  }
+  res
+    .status(200)
+    .header('Authorization', req.body.token)
+    .json({
+      message: 'Authentication succeed!'
+    });
+});
+
+router.post('/logout', tokenAuth, (req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({
+      message: "Can't handle request"
+    });
+  }
+
+  req.user
+    .removeToken(req.token)
+    .then(user => {
+      res.status(200).json({
+        message: 'Yeay! Deleted...',
+        user: user
+      });
+    })
+    .catch(err => {
+      res.status(401).json({
+        message: "Can't handle request"
+      });
+    });
 });
 
 router.delete('/:userId', (req, res, next) => {

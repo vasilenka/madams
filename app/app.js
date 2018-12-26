@@ -7,11 +7,16 @@ const mongoose = require('mongoose');
 
 // Connect to Database
 mongoose.set('useFindAndModify', false);
-mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}`,
-{
-  useNewUrlParser: true
-})
-.catch(err => console.log(err))
+mongoose
+  .connect(
+    `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
+      process.env.DB_URL
+    }`,
+    {
+      useNewUrlParser: true
+    }
+  )
+  .catch(err => console.log(err));
 mongoose.Promise = global.Promise;
 
 // Ignite the App
@@ -27,9 +32,15 @@ app.use(express.static(path.join(__dirname, 'app/public')));
 // Allow CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if(req.method === 'OPTIONS') {
-    res.header('Access-Control-Allowed-Methods', 'GET, POST, PATCH, PUT, DELETE');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  if (req.method === 'OPTIONS') {
+    res.header(
+      'Access-Control-Allowed-Methods',
+      'GET, POST, PATCH, PUT, DELETE'
+    );
     return res.status(200).json({});
   }
   next();
