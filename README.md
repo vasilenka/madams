@@ -313,7 +313,6 @@ This request will response with `message` and an object consist of a the project
 ```
 
 
-
 # Contributing to this repository
 We'll be happy if you want to contribute to this projects. Just fork this repository and submit a pull request (PR).
 If you find something wrong or you want to give us some feedback, don't be shy to file an issue.
