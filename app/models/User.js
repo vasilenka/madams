@@ -76,6 +76,7 @@ userSchema.methods.toJSON = function() {
     'email',
     'username',
     'firstName',
+    'tokens',
     'lastName',
     'role',
     'createdAt',
@@ -105,8 +106,7 @@ userSchema.methods.generateAuthToken = function() {
       email: user.email,
       username: user.username
     },
-    process.env.SECRET_SAUCE,
-    { expiresIn: '30 days' }
+    process.env.SECRET_SAUCE
   );
 
   user.tokens = user.tokens.concat([{ access, token }]);
@@ -120,8 +120,8 @@ userSchema.methods.isTokenExist = function() {
 
   let existingToken = user.tokens.filter(
     token =>
-      token.access === 'auth' &&
-      jwt.verify(token.token, process.env.SECRET_SAUCE)
+      jwt.verify(token.token, process.env.SECRET_SAUCE) &&
+      token.access === 'auth'
   );
 
   if (existingToken.length > 0) {
