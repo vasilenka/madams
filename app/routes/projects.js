@@ -4,9 +4,25 @@ const pick = require('lodash.pick');
 const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
 
+const redis = require('redis');
+const redisUrl = 'redis://127.0.0.1:6379';
+const client = redis.createClient(redisUrl);
+const util = require('util');
+client.get = util.promisify(client.get);
+
 let Project = require('./../models/Project');
 
-router.get('/', function(req, res, next) {
+router.get('/', async (req, res, next) => {
+  let cachedProjects = await client.get('get_all_projects');
+
+  if (cachedProjects) {
+    console.log('SERVING FROM REDIS!');
+    return res.status(200).json({
+      server: 'REDIS',
+      projects: JSON.parse(cachedProjects)
+    });
+  }
+
   Project.find()
     .select('_id name teams tags startDate endDate createdAt updatedAt')
     .populate('teams')
@@ -31,8 +47,12 @@ router.get('/', function(req, res, next) {
           ])
         };
       });
+
+      client.set('get_all_projects', JSON.stringify(projectData));
+
       res.status(200).json({
         message: 'GET request to the /projects',
+        server: 'MONGODB',
         projects: projectData
       });
     })
@@ -45,7 +65,20 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/:projectId', (req, res, next) => {
+router.get('/:projectId', async (req, res, next) => {
+  // Check for cached data
+  let cachedProject = await client.get(req.params.projectId);
+
+  // If yes, respond right away
+  if (cachedProject) {
+    return res.status(200).json({
+      server: 'REDIS',
+      project: JSON.parse(cachedProject)
+    });
+  }
+
+  // If no,respond the request and update the cache to store data
+
   let query = req.params.projectId;
   Project.findById(query)
     .select('_id name teams status tags startDate endDate createdAt updatedAt')
@@ -56,6 +89,8 @@ router.get('/:projectId', (req, res, next) => {
           message: 'Unable to get project with provided projectId'
         });
       }
+
+      client.set(req.params.projectId, JSON.stringify(project));
 
       let projectData = pick(project, [
         '_id',
@@ -70,6 +105,7 @@ router.get('/:projectId', (req, res, next) => {
       ]);
       res.status(200).json({
         message: 'GET request to project/:projectId',
+        server: 'MONGODB',
         project: projectData
       });
     })
