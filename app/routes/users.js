@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const pick = require('lodash.pick');
 
-const compare = require('../middleware/auth/compare-hash');
 const tokenAuth = require('../middleware/auth/token-authentication');
 const checkEmail = require('../middleware/auth/check-email');
 const hash = require('../middleware/auth/hash');
@@ -103,11 +102,12 @@ router.post('/', checkEmail, hash, (req, res, next) => {
     });
 });
 
-router.patch('/:userId', async (req, res, next) => {
+router.patch('/:userId', tokenAuth, async (req, res, next) => {
   let props = pick(req.body, [
     'username',
     'password',
     'email',
+    'role',
     'firstName',
     'lastName'
   ]);
@@ -118,7 +118,6 @@ router.patch('/:userId', async (req, res, next) => {
   let query = req.params.userId;
 
   User.findByIdAndUpdate(query, { $set: props }, { new: true })
-    .select('_id username email firstName lastName createdAt updatedAt role')
     .then(user => {
       res.status(200).json({
         message: 'User successfully updated!',
@@ -164,7 +163,8 @@ router.post('/logout', tokenAuth, (req, res, next) => {
     })
     .catch(err => {
       res.status(401).json({
-        message: "Can't handle request"
+        message: "Can't handle request",
+        error: err
       });
     });
 });

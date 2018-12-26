@@ -75,7 +75,6 @@ userSchema.methods.toJSON = function() {
     '_id',
     'email',
     'username',
-    'tokens',
     'firstName',
     'lastName',
     'role',
