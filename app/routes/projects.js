@@ -3,12 +3,7 @@ const router = express.Router();
 const pick = require('lodash.pick');
 const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
-
-const redis = require('redis');
-const redisUrl = 'redis://127.0.0.1:6379';
-const client = redis.createClient(redisUrl);
-const util = require('util');
-client.get = util.promisify(client.get);
+const client = require('./../helper/init-redis');
 
 let Project = require('./../models/Project');
 
