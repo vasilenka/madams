@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5500
 
-CMD ["npm", "dev"]
+CMD ["npm", "start"]

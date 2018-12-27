@@ -3,20 +3,20 @@ const router = express.Router();
 const pick = require('lodash.pick');
 const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
-const client = require('./../helper/init-redis');
+// const client = require('./../helper/init-redis');
 
 let Project = require('./../models/Project');
 
 router.get('/', async (req, res, next) => {
-  let cachedProjects = await client.get('get_all_projects');
+  // let cachedProjects = await client.get('get_all_projects');
 
-  if (cachedProjects) {
-    console.log('SERVING FROM REDIS!');
-    return res.status(200).json({
-      server: 'REDIS',
-      projects: JSON.parse(cachedProjects)
-    });
-  }
+  // if (cachedProjects) {
+  //   console.log('SERVING FROM REDIS!');
+  //   return res.status(200).json({
+  //     server: 'REDIS',
+  //     projects: JSON.parse(cachedProjects)
+  //   });
+  // }
 
   Project.find()
     .select('_id name teams tags startDate endDate createdAt updatedAt')
@@ -43,7 +43,7 @@ router.get('/', async (req, res, next) => {
         };
       });
 
-      client.set('get_all_projects', JSON.stringify(projectData));
+      // client.set('get_all_projects', JSON.stringify(projectData));
 
       res.status(200).json({
         message: 'GET request to the /projects',
@@ -61,18 +61,14 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:projectId', async (req, res, next) => {
-  // Check for cached data
-  let cachedProject = await client.get(req.params.projectId);
+  // let cachedProject = await client.get(req.params.projectId);
 
-  // If yes, respond right away
-  if (cachedProject) {
-    return res.status(200).json({
-      server: 'REDIS',
-      project: JSON.parse(cachedProject)
-    });
-  }
-
-  // If no,respond the request and update the cache to store data
+  // if (cachedProject) {
+  //   return res.status(200).json({
+  //     server: 'REDIS',
+  //     project: JSON.parse(cachedProject)
+  //   });
+  // }
 
   let query = req.params.projectId;
   Project.findById(query)
@@ -85,7 +81,7 @@ router.get('/:projectId', async (req, res, next) => {
         });
       }
 
-      client.set(req.params.projectId, JSON.stringify(project));
+      // client.set(req.params.projectId, JSON.stringify(project));
 
       let projectData = pick(project, [
         '_id',

@@ -5,19 +5,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
-const client = require('./helper/init-redis');
-console.log(client.ready);
-
 // Connect to Database
+// const mongoUrl = `mongodb://${ process.env.MONGO_INITDB_ROOT_USERNAME }:${ process.env.MONGO_INITDB_ROOT_PASSWORD }@${process.env.DB_URL}`;
+const mongoUrl = `mongodb://mongo:27017/madams`;
 mongoose.set('useFindAndModify', false);
 mongoose
   .connect(
-    `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
-      process.env.DB_URL
-    }`,
-    {
-      useNewUrlParser: true
-    }
+    mongoUrl,
+    { useNewUrlParser: true }
   )
   .then(() => console.log('MongoDB Connected....'))
   .catch(err => console.log(err));
