@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
+const client = require('./helper/init-redis');
+console.log(client.ready);
+
 // Connect to Database
 mongoose.set('useFindAndModify', false);
 mongoose
@@ -16,6 +19,7 @@ mongoose
       useNewUrlParser: true
     }
   )
+  .then(() => console.log('MongoDB Connected....'))
   .catch(err => console.log(err));
 mongoose.Promise = global.Promise;
 

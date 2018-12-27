@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    container_name: madams
+    restart: always
+    build: .
+    ports:
+      - '80:5000'
+    links:
+      - mongo
+    environment:
+      DB_URL: mongo:27017/madams
+      DB_USER: root
+      DB_PASSWORD: muschSecurePassword
+
+  mongo:
+    container_name: madams-mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: muschSecurePassword
+
+  redis:
+    container_name: madams-redis
+    image: redis
+    ports:
+      - '6379:6379'
