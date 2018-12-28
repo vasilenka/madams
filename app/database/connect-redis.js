@@ -6,5 +6,6 @@ const client = redis.createClient(redisUrl);
 
 const util = require('util');
 client.get = util.promisify(client.get);
+client.set = util.promisify(client.set);
 
 module.exports = client;

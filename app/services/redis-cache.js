@@ -3,11 +3,19 @@ const client = require('./../database/connect-redis');
 
 const exec = mongoose.Query.prototype.exec;
 
+mongoose.Query.prototype.cache = async function() {
+  this.useCache = true;
+  return this;
+};
+
 mongoose.Query.prototype.exec = async function() {
-  let query = this;
+  if (!this.useCache) {
+    return exec.apply(this, arguments);
+  }
+
   let key = JSON.stringify(
-    Object.assign({}, query.getQuery(), {
-      collection: query.mongooseCollection.name
+    Object.assign({}, this.getQuery(), {
+      collection: this.mongooseCollection.name
     })
   );
 
@@ -17,16 +25,14 @@ mongoose.Query.prototype.exec = async function() {
     const doc = JSON.parse(cachedValue);
 
     return Array.isArray(doc)
-      ? doc.map(data => {
-          return new query.model({ data });
-        })
-      : new query.model(doc);
+      ? doc.map(d => new this.model({ ...d, from: 'redis' }))
+      : new this.model({ ...doc, from: 'redis' });
   }
 
-  const result = await exec.apply(query, arguments);
+  const result = await exec.apply(this, arguments);
 
   if (result) {
-    client.set(key, JSON.stringify(result));
+    await client.set(key, JSON.stringify(result));
     return result;
   }
 };

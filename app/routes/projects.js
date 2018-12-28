@@ -9,8 +9,11 @@ let Project = require('./../models/Project');
 
 router.get('/', async (req, res, next) => {
   Project.find()
-    .select('_id name teams tags startDate endDate createdAt updatedAt')
+    .select(
+      '_id name status teams tags startDate endDate createdAt updatedAt from'
+    )
     .populate('teams')
+    .cache()
     .then(projects => {
       if (projects.length === 0) {
         return res.status(200).json({
@@ -25,6 +28,7 @@ router.get('/', async (req, res, next) => {
             'name',
             'teams',
             'status',
+            'from',
             'tags',
             'startDate',
             'endDate',
@@ -34,9 +38,8 @@ router.get('/', async (req, res, next) => {
         };
       });
 
-      res.status(200).json({
+      res.status(200).send({
         message: 'GET request to the /projects',
-        server: 'MONGODB',
         projects: projectData
       });
     })
@@ -52,7 +55,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:projectId', async (req, res, next) => {
   let query = req.params.projectId;
   Project.findById(query)
-    .select('_id name teams status tags startDate endDate createdAt updatedAt')
+    // .select('_id name teams status tags startDate endDate createdAt updatedAt from')
     .populate('teams')
     .then(project => {
       if (!project) {
@@ -67,6 +70,7 @@ router.get('/:projectId', async (req, res, next) => {
         'teams',
         'tags',
         'status',
+        'from',
         'startDate',
         'endDate',
         'createdAt',
@@ -74,7 +78,6 @@ router.get('/:projectId', async (req, res, next) => {
       ]);
       res.status(200).json({
         message: 'GET request to project/:projectId',
-        server: 'MONGODB',
         project: projectData
       });
     })
@@ -82,6 +85,7 @@ router.get('/:projectId', async (req, res, next) => {
       console.log(err);
       res.send(500).json({
         message: 'Unable to fetch project data',
+        served: 'mongo',
         error: err
       });
     });
@@ -92,6 +96,7 @@ router.post('/', function(req, res, next) {
     _id: new mongoose.Types.ObjectId(),
     ...pick(req.body, [
       'name',
+      'from',
       'teams',
       'status',
       'tags',
@@ -112,6 +117,7 @@ router.post('/', function(req, res, next) {
           '_id',
           'name',
           'teams',
+          'from',
           'tags',
           'startDate',
           'status',
@@ -125,6 +131,7 @@ router.post('/', function(req, res, next) {
       console.log(err);
       res.status(500).json({
         message: 'Unable to create projects!',
+        served: 'mongo',
         error: err
       });
     });
