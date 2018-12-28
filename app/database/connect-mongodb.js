@@ -7,8 +7,10 @@ const connectToMongo = async () => {
   let maxReconnect = 10;
   let mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME + ':' ||
     ''}${process.env.MONGO_INITDB_ROOT_PASSWORD + '@' || ''}${process.env
-    .MONGO_HOST + '/' || ''}${process.env.MONGO_INITDB_DATABASE +
-    '?authSource=admin' || '127.0.0.1:27017/madams'}`;
+    .MONGO_HOST_LOCAL + '/' ||
+    process.env.MONGO_HOST + '/' ||
+    ''}${process.env.MONGO_INITDB_DATABASE + '?authSource=admin' ||
+    '127.0.0.1:27017/madams'}`;
 
   mongoose.set('useFindAndModify', false);
 
