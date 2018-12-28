@@ -8,9 +8,9 @@ services:
     volumes:
       - /Users/herlambang/data/db:/data/db
     #   # - /data/db:/data/db
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: madams
-    #   MONGO_INITDB_ROOT_PASSWORD: madadadadam173
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: madams
+      MONGO_INITDB_ROOT_PASSWORD: madadadadam173
 
   redis:
     container_name: madams-redis
