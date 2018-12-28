@@ -39,4 +39,4 @@ services:
       - madamsnet
     environment: *common-variables
 networks:
-  madamsnet
+  madamsnet:
