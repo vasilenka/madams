@@ -3,25 +3,36 @@ const mongoose = require('mongoose');
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const connectToMongo = async () => {
-  mongoose.set('useFindAndModify', false);
-
   let connected = false;
-  let maxReconnect = 20;
+  let maxReconnect = 10;
+  let mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME + ':' ||
+    ''}${process.env.MONGO_INITDB_ROOT_PASSWORD + '@' || ''}${process.env
+    .MONGO_HOST + '?authSource=admin' || '127.0.0.1:27017/madams'}`;
+
+  mongoose.set('useFindAndModify', false);
 
   while (!connected && maxReconnect) {
     try {
       let mongo = await mongoose.connect(
-        `mongodb://${process.env.MONGO_USERNAME + ':' || ''}${process.env
-          .MONGO_PASSWORD + '@' || ''}${process.env.MONGO_HOST ||
-          '127.0.0.1:27017/madams'}`,
-        { useNewUrlParser: true }
+        mongoUrl,
+        {
+          useNewUrlParser: true,
+          reconnectTries: 10,
+          reconnectInterval: 500,
+          connectTimeoutMS: 10000
+        }
       );
       if (mongo) {
-        console.log('MongoDB Connected....');
+        console.log('======================================');
+        console.log('MONGODB CONNECTED....');
+        console.log('======================================');
         connected = true;
+      } else {
       }
     } catch (err) {
-      console.log('Reconnecting to database in 5 seconds...');
+      console.log('======================================');
+      console.log('Reconnecting to database in 2 seconds...');
+      console.log('======================================');
       await sleep(2000);
       maxReconnect -= 1;
     }
@@ -29,10 +40,5 @@ const connectToMongo = async () => {
 
   mongoose.Promise = global.Promise;
 };
-
-// mongoose
-//   .connect(`mongodb://${process.env.MONGO_USERNAME || ''}:${process.env.MONGO_PASSWORD || ''}@${process.env.MONGO_HOST || '127.0.0.1:27017/madams'}`,
-//     { useNewUrlParser: true }
-//   )
 
 module.exports = connectToMongo;
