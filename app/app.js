@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 // const cookieParser = require('cookie-parser');
 
 // Connect to MongoDB
-require('./helper/connect-mongodb');
+require('./database/connect-mongodb')();
 
 // Ignite the App
 const app = express();

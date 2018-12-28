@@ -3,7 +3,7 @@ const router = express.Router();
 const pick = require('lodash.pick');
 const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
-const client = require('../helper/connect-redis');
+const client = require('../database/connect-redis');
 
 let Project = require('./../models/Project');
 
