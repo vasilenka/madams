@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
-// Connect to Database
-// const mongoUrl = `mongodb://${ process.env.MONGO_INITDB_ROOT_USERNAME }:${ process.env.MONGO_INITDB_ROOT_PASSWORD }@${process.env.DB_URL}`;
-const mongoUrl = `mongodb://mongo:27017/madams`;
+const mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${
+  process.env.MONGO_INITDB_ROOT_PASSWORD
+}@${process.env.MONGO_HOST}:27017/madams`;
 mongoose.set('useFindAndModify', false);
 mongoose
   .connect(

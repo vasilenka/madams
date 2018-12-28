@@ -1,22 +1,32 @@
 version: '3'
 services:
   app:
-    container_name: madams
+    container_name: madams-app
     restart: always
     build: .
     ports:
-      - '8000:5000'
+      - '80:5000'
+      - '8731:5000'
     links:
       - mongo
+      - redis
+    environment:
+      REDIS_HOST: redis
+      MONGO_HOST: mongodb
 
-  mongo:
+  mongodb:
     container_name: madams-mongo
     image: mongo
     ports:
       - '27017:27017'
+    volumes:
+      - /data/db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: madams
+      MONGO_INITDB_ROOT_PASSWORD: madadadadam173
 
-  # redis:
-  #   container_name: madams-redis
-  #   image: redis
-  #   ports:
-  #     - '6379:6379'
+  redis:
+    container_name: madams-redis
+    image: redis
+    ports:
+      - '6379:6379'
