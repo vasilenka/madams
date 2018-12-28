@@ -8,25 +8,16 @@ const client = require('../database/connect-redis');
 let Project = require('./../models/Project');
 
 router.get('/', async (req, res, next) => {
-  let cachedProjects = await client.get('get_all_projects');
-
-  if (cachedProjects) {
-    console.log('SERVING FROM REDIS!');
-    return res.status(200).json({
-      server: 'REDIS',
-      projects: JSON.parse(cachedProjects)
-    });
-  }
-
   Project.find()
     .select('_id name teams tags startDate endDate createdAt updatedAt')
     .populate('teams')
     .then(projects => {
       if (projects.length === 0) {
-        res.status(200).json({
+        return res.status(200).json({
           message: "You don't have any project yet. Create new one!"
         });
       }
+
       let projectData = projects.map(project => {
         return {
           ...pick(project, [
@@ -42,8 +33,6 @@ router.get('/', async (req, res, next) => {
           ])
         };
       });
-
-      client.set('get_all_projects', JSON.stringify(projectData));
 
       res.status(200).json({
         message: 'GET request to the /projects',
@@ -61,15 +50,6 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:projectId', async (req, res, next) => {
-  let cachedProject = await client.get(req.params.projectId);
-
-  if (cachedProject) {
-    return res.status(200).json({
-      server: 'REDIS',
-      project: JSON.parse(cachedProject)
-    });
-  }
-
   let query = req.params.projectId;
   Project.findById(query)
     .select('_id name teams status tags startDate endDate createdAt updatedAt')
@@ -80,8 +60,6 @@ router.get('/:projectId', async (req, res, next) => {
           message: 'Unable to get project with provided projectId'
         });
       }
-
-      client.set(req.params.projectId, JSON.stringify(project));
 
       let projectData = pick(project, [
         '_id',
