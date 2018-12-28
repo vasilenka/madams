@@ -2,21 +2,10 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 // const cookieParser = require('cookie-parser');
 
-const mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${
-  process.env.MONGO_INITDB_ROOT_PASSWORD
-}@${process.env.MONGO_HOST}:27017/madams`;
-mongoose.set('useFindAndModify', false);
-mongoose
-  .connect(
-    mongoUrl,
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log('MongoDB Connected....'))
-  .catch(err => console.log(err));
-mongoose.Promise = global.Promise;
+// Connect to MongoDB
+require('./helper/connect-mongodb');
 
 // Ignite the App
 const app = express();

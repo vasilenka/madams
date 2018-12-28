@@ -8,11 +8,12 @@ services:
       - '80:5000'
       - '8731:5000'
     links:
-      - mongo
+      - mongodb
       - redis
     environment:
+      PORT: 5000
       REDIS_HOST: redis
-      MONGO_HOST: mongodb
+      MONGO_HOST: mongodb:27017/madams-express
 
   mongodb:
     container_name: madams-mongo
@@ -21,6 +22,7 @@ services:
       - '27017:27017'
     volumes:
       - /data/db:/data/db
+      - /Users/herlambang/mongo-data/db:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: madams
       MONGO_INITDB_ROOT_PASSWORD: madadadadam173
