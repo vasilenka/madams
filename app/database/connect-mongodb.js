@@ -1,20 +1,25 @@
 const mongoose = require('mongoose');
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const connectToMongo = async () => {
   mongoose.set('useFindAndModify', false);
 
   let connected = false;
   let maxReconnect = 20;
-  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   while (!connected && maxReconnect) {
     try {
-      mongoose.connect(
-        `mongodb://${process.env.MONGO_HOST || '127.0.0.1:27017/madams'}`,
+      let mongo = await mongoose.connect(
+        `mongodb://${process.env.MONGO_USERNAME + ':' || ''}${process.env
+          .MONGO_PASSWORD + '@' || ''}${process.env.MONGO_HOST ||
+          '127.0.0.1:27017/madams'}`,
         { useNewUrlParser: true }
       );
-      console.log('MongoDB Connected....');
-      connected = true;
+      if (mongo) {
+        console.log('MongoDB Connected....');
+        connected = true;
+      }
     } catch (err) {
       console.log('Reconnecting to database in 5 seconds...');
       await sleep(2000);
