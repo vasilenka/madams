@@ -4,6 +4,7 @@ const pick = require('lodash.pick');
 const empty = require('lodash.isempty');
 const mongoose = require('mongoose');
 const client = require('../database/connect-redis');
+const { clearHash } = require('./../services/redis-cache');
 
 let Project = require('./../models/Project');
 
@@ -91,7 +92,7 @@ router.get('/:projectId', async (req, res, next) => {
     });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', async (req, res, next) => {
   let project = new Project({
     _id: new mongoose.Types.ObjectId(),
     ...pick(req.body, [
@@ -105,15 +106,12 @@ router.post('/', function(req, res, next) {
     ])
   });
 
-  project
-    .save()
-    .then(project => {
-      if (!project) {
-        Promise.reject();
-      }
+  try {
+    let saved = await project.save();
+    if (saved) {
       res.status(200).json({
         message: 'POST request to the /projects',
-        project: pick(project, [
+        project: pick(saved, [
           '_id',
           'name',
           'teams',
@@ -126,15 +124,16 @@ router.post('/', function(req, res, next) {
           'updatedAt'
         ])
       });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({
-        message: 'Unable to create projects!',
-        served: 'mongo',
-        error: err
-      });
+      clearHash();
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Unable to create projects!',
+      served: 'mongo',
+      error: err
     });
+  }
 });
 
 router.patch('/:projectId', (req, res, next) => {

@@ -5,7 +5,6 @@ const redisUrl = `redis://${process.env.REDIS_HOST || '127.0.0.1'}:${process.env
 const client = redis.createClient(redisUrl);
 
 const util = require('util');
-client.get = util.promisify(client.get);
-client.set = util.promisify(client.set);
+client.hget = util.promisify(client.hget);
 
 module.exports = client;
