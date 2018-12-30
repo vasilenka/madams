@@ -6,24 +6,46 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLID,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = graphql;
 
 let books = [
   {
     id: '1',
     name: 'Sherlock Holmes',
-    genre: 'thriller'
+    genre: 'thriller',
+    authorId: '1'
   },
   {
     id: '2',
     name: 'The Programming Language',
-    genre: 'computer science'
+    genre: 'computer science',
+    authorId: '2'
   },
   {
     id: '3',
     name: 'Romeo and Juliet',
-    genre: 'romance'
+    genre: 'romance',
+    authorId: '3'
+  },
+  {
+    id: '4',
+    name: 'Javascript and Stuff and Things',
+    genre: 'myth',
+    authorId: '3'
+  },
+  {
+    id: '5',
+    name: "Let's talk about today",
+    genre: 'slice of life',
+    authorId: '2'
+  },
+  {
+    id: '6',
+    name: 'Simba and Masbul',
+    genre: 'adventure',
+    authorId: '2'
   }
 ];
 
@@ -50,7 +72,13 @@ const BookType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    genre: { type: GraphQLString }
+    genre: { type: GraphQLString },
+    author: {
+      type: AuthorType,
+      resolve(parent, args) {
+        return authors.find(author => author.id == parent.authorId);
+      }
+    }
   })
 });
 
@@ -59,7 +87,13 @@ const AuthorType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve(parent, args) {
+        return books.filter(book => book.authorId == parent.id);
+      }
+    }
   })
 });
 
@@ -72,7 +106,7 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLID }
       },
       resolve(parent, args) {
-        return _.find(books, { id: args.id });
+        return books.find(book => book.id == args.id);
       }
     },
     author: {
@@ -81,8 +115,7 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLID }
       },
       resolve(parent, args) {
-        console.log(args.id);
-        return _.find(authors, { id: args.id });
+        return authors.find(author => author.id == args.id);
       }
     }
   }
