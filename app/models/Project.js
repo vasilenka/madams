@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const projectSchema = mongoose.Schema({
-  _id: ObjectId,
+  // _id: ObjectId,
   from: {
     type: String,
     lowercase: true

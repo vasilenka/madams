@@ -6,7 +6,7 @@ const pick = require('lodash.pick');
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userSchema = mongoose.Schema({
-  _id: ObjectId,
+  // _id: ObjectId,
   email: {
     type: String,
     required: true,
@@ -24,10 +24,16 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true
   },
+  projects: [
+    {
+      type: ObjectId,
+      ref: 'Project'
+    }
+  ],
   password: {
     minlength: [8, 'Password minimum length is 8 characters'],
     trim: true,
-    required: true,
+    // required: true,
     type: String
   },
   firstName: {

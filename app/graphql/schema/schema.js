@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 const _ = require('lodash');
+const mongoose = require('mongoose');
 
 const {
   GraphQLSchema,
@@ -7,91 +8,52 @@ const {
   GraphQLString,
   GraphQLID,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLInputObjectType
 } = graphql;
 
-let books = [
-  {
-    id: '1',
-    name: 'Sherlock Holmes',
-    genre: 'thriller',
-    authorId: '1'
-  },
-  {
-    id: '2',
-    name: 'The Programming Language',
-    genre: 'computer science',
-    authorId: '2'
-  },
-  {
-    id: '3',
-    name: 'Romeo and Juliet',
-    genre: 'romance',
-    authorId: '3'
-  },
-  {
-    id: '4',
-    name: 'Javascript and Stuff and Things',
-    genre: 'myth',
-    authorId: '3'
-  },
-  {
-    id: '5',
-    name: "Let's talk about today",
-    genre: 'slice of life',
-    authorId: '2'
-  },
-  {
-    id: '6',
-    name: 'Simba and Masbul',
-    genre: 'adventure',
-    authorId: '2'
-  }
-];
+const User = require('./../../models/User');
+const Project = require('./../../models/Project');
 
-let authors = [
-  {
-    id: '1',
-    name: 'Ongki Herlambang',
-    age: 25
-  },
-  {
-    id: '2',
-    name: 'Khairani Ummah',
-    age: 25
-  },
-  {
-    id: '3',
-    name: 'Hanifan Mohammad',
-    age: 24
-  }
-];
-
-const BookType = new GraphQLObjectType({
-  name: 'Book',
+const UserType = new GraphQLObjectType({
+  name: 'User',
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    genre: { type: GraphQLString },
-    author: {
-      type: AuthorType,
+    username: { type: GraphQLString },
+    email: { type: GraphQLString },
+    firstName: { type: GraphQLString },
+    lastName: { type: GraphQLString },
+    projects: {
+      type: new GraphQLList(ProjectType),
       resolve(parent, args) {
-        return authors.find(author => author.id == parent.authorId);
+        parent.projects
+          ? parent.projects.length > 0
+            ? parent.projects.map(project => {
+                let query = { _id: project.id };
+                Project.find(query)
+                  .then(project => project)
+                  .catch(err => console.log(err));
+              })
+            : ''
+          : '';
       }
     }
   })
 });
 
-const AuthorType = new GraphQLObjectType({
-  name: 'Author',
+const ProjectType = new GraphQLObjectType({
+  name: 'Project',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLInt },
-    books: {
-      type: new GraphQLList(BookType),
+    teams: {
+      type: new GraphQLList(UserType),
       resolve(parent, args) {
-        return books.filter(book => book.authorId == parent.id);
+        return parent.teams.map(id =>
+          User.findById(id)
+            .then(user => user)
+            .catch(err => console.log(err))
+        );
       }
     }
   })
@@ -100,25 +62,87 @@ const AuthorType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    book: {
-      type: BookType,
-      args: {
-        id: { type: GraphQLID }
-      },
+    users: {
+      type: new GraphQLList(UserType),
       resolve(parent, args) {
-        return books.find(book => book.id == args.id);
+        return User.find()
+          .then(users => users)
+          .catch(err => console.log(err));
       }
     },
-    author: {
-      type: AuthorType,
+    user: {
+      type: UserType,
       args: {
         id: { type: GraphQLID }
       },
       resolve(parent, args) {
-        return authors.find(author => author.id == args.id);
+        // return books.find(book => book.id == args.id);
+      }
+    },
+    project: {
+      type: ProjectType,
+      args: {
+        id: { type: GraphQLID }
+      },
+      resolve(parent, args) {
+        // return authors.find(author => author.id == args.id);
+      }
+    },
+    projects: {
+      type: new GraphQLList(ProjectType),
+      resolve(parent, args) {
+        return Project.find()
+          .then(projects => projects)
+          .catch(err => console.log(err));
       }
     }
   }
 });
 
-module.exports = new GraphQLSchema({ query: RootQuery });
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        username: { type: GraphQLString },
+        email: { type: GraphQLString },
+        projects: { type: GraphQLList(GraphQLString) }
+      },
+      resolve(parent, args) {
+        let user = new User({
+          username: args.username,
+          email: args.email,
+          projects: args.projects
+        });
+
+        return user
+          .save()
+          .then(user => user)
+          .catch(err => console.log('Error: ', err));
+      }
+    },
+    addProject: {
+      type: ProjectType,
+      args: {
+        name: { type: GraphQLString },
+        teams: { type: new GraphQLList(GraphQLString) }
+      },
+      resolve(parent, args) {
+        let project = new Project({
+          name: args.name,
+          teams: args.teams
+        });
+        return project
+          .save()
+          .then(project => project)
+          .catch(err => console.log(err));
+      }
+    }
+  }
+});
+
+module.exports = new GraphQLSchema({
+  query: RootQuery,
+  mutation: Mutation
+});
