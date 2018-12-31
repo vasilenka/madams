@@ -1,0 +1,8 @@
+@import '~invoker-tokens/index.scss';
+
+.root {
+  font-family: 'Roboto Mono', monospace;
+  padding: $space-inset-ml;
+  margin: $space-stack-l;
+  background: $bg-dust-100;
+}

@@ -1,0 +1,13 @@
+@import '~invoker-tokens/index.scss';
+
+.root {
+  margin: $space-stack-ml;
+}
+
+.title {
+  margin: $space-stack-s;
+}
+
+.description {
+  color: $dark-alpha-70;
+}

@@ -1,0 +1,89 @@
+@import '~invoker-tokens/index.scss';
+
+.root {
+  height: 100%;
+}
+
+.normal {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include screen(phone) {
+    max-width: 100%;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  @include screen(tabPortrait) {
+    max-width: 100%;
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+  }
+
+  @include screen(tabLandscape) {
+    max-width: 100%;
+  }
+
+  @include screen(desktop) {
+    max-width: 100%;
+    padding-right: 80px !important;
+    padding-left: 80px !important;
+  }
+
+  @include screen(desktopWide) {
+    max-width: 100%;
+    padding-right: 144px !important;
+    padding-left: 144px !important;
+  }
+}
+
+.narrow {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include screen(phone) {
+    max-width: 100%;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  @include screen(tabPortrait) {
+    max-width: 100%;
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+  }
+
+  @include screen(tabLandscape) {
+    max-width: 100%;
+  }
+
+  @include screen(desktop) {
+    max-width: 1080px;
+  }
+}
+
+.bleed {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.fixLeft {
+  margin-left: 15vw;
+  padding-left: $space-ml;
+  padding-top: $space-ml;
+}
+
+.fixRight {
+  @include screen(phone) {
+    margin-right: 0;
+  }
+  @include screen(tabPortrait) {
+    margin-right: 0;
+  }
+  @include screen(tabLandscape) {
+    margin-right: 25vw;
+  }
+}

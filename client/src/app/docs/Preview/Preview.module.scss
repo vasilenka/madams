@@ -1,0 +1,24 @@
+@import '~invoker-tokens/index.scss';
+
+.root {
+  padding: $space-inset-ml;
+  border-radius: 3px;
+  width: 100%;
+  background: #ffffff
+    url('data:image/svg+xml,\
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" fill-opacity=".06" >\
+      <rect x="200" width="200" height="200" />\
+      <rect y="200" width="200" height="200" />\
+    </svg>');
+  background-size: 20px 20px;
+}
+
+// .root {
+//   padding: $space-inset-ml;
+//   border-radius: 3px;
+//   border: 1px solid rgba(0,0,0,.04);
+//   background-image:
+//     linear-gradient(transparent 11px, rgba(220,220,200,.8) 12px, transparent 12px),
+// 	  linear-gradient(90deg, transparent 11px, rgba(220,220,200,.8) 12px, transparent 12px);
+// 	background-size: 100% 12px, 12px 100%;
+// }
