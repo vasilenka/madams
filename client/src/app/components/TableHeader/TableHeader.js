@@ -12,7 +12,11 @@ const TableHeader = ({ children, className, ...restProps }) => {
       })}
     >
       {children &&
-        children.map((th, index) => <th className={styles.rowHeader}>{th}</th>)}
+        children.map((th, index) => (
+          <th key={index} className={styles.rowHeader}>
+            {th}
+          </th>
+        ))}
     </tr>
   );
 };

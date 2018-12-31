@@ -23,8 +23,10 @@ class Table extends Component {
         </thead>
         <tbody>
           {body &&
-            body.map(row => (
-              <TableRow className={styles.tableRow}>{row}</TableRow>
+            body.map((row, index) => (
+              <TableRow key={index} className={styles.tableRow}>
+                {row}
+              </TableRow>
             ))}
         </tbody>
       </table>

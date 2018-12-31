@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import styles from './App.module.scss';
 import classnames from 'classnames';
 
@@ -14,23 +14,15 @@ import TextfieldPage from './container/TextfieldPage/TextfieldPage';
 import TextPage from './container/TextPage/TextPage';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-      options: ['Primary options', 'Secondary options']
-    };
-  }
-
-  componentDidMount = () => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(json =>
-        this.setState({
-          users: json
-        })
-      );
-  };
+  routeGroup = [
+    {
+      title: 'Components',
+      routes: [
+        { name: 'Text', path: '/text' },
+        { name: 'Textfield', path: '/textfield' }
+      ]
+    }
+  ];
 
   render() {
     return (
@@ -40,20 +32,34 @@ class App extends Component {
           <React.Fragment>
             <Container fixLeft fixRight>
               <MainContent>
-                <Route exact path="/text" component={TextPage} />
-                <Route exact path="/textfield" component={TextfieldPage} />
+                <Switch>
+                  <Route exact path="/text" component={TextPage} />
+                  <Route exact path="/textfield" component={TextfieldPage} />
+                </Switch>
               </MainContent>
             </Container>
+
             <LeftSection fixed className={styles.leftSection}>
-              <Text heading6 component="h3" className={styles.sidebarTitle}>
-                Components
-              </Text>
-              <Link to="/text">
-                <Text className={styles.link}>Text</Text>
-              </Link>
-              <Link to="/textfield">
-                <Text className={styles.link}>Textfield</Text>
-              </Link>
+              {this.routeGroup.map((group, groupIndex) => {
+                return (
+                  <React.Fragment key={groupIndex}>
+                    <Text
+                      heading6
+                      component="h3"
+                      className={styles.sidebarTitle}
+                    >
+                      {group.title}
+                    </Text>
+                    {group.routes.map((route, routeIndex) => {
+                      return (
+                        <Link key={routeIndex} to={route.path}>
+                          <Text className={styles.link}>{route.name}</Text>
+                        </Link>
+                      );
+                    })}
+                  </React.Fragment>
+                );
+              })}
             </LeftSection>
           </React.Fragment>
         </Router>

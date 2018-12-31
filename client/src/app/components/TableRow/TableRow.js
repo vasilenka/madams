@@ -25,7 +25,7 @@ const TableRow = ({ className, children, ...restProps }) => {
         </td>
       )}
       {children.required === false && <td className={styles.tableCell} />}
-      {children.required === undefined && ''}
+      {/* {children.required === undefined && ''} */}
       <td className={classnames(styles.tableCell)}>
         <Text className={classnames(styles.primary, styles.code)} heading5>
           {children.name}
