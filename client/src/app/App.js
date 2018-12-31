@@ -12,16 +12,22 @@ import Text from './components/Text/Text';
 
 import TextfieldPage from './container/TextfieldPage/TextfieldPage';
 import TextPage from './container/TextPage/TextPage';
+import DashboardPage from './container/Dashboard/DashboardPage';
 
 class App extends Component {
   routeGroup = [
+    {
+      routes: [
+        { name: 'Dashboard', path: '/' },
+      ]
+    },
     {
       title: 'Components',
       routes: [
         { name: 'Text', path: '/text' },
         { name: 'Textfield', path: '/textfield' }
       ]
-    }
+    },
   ];
 
   render() {
@@ -33,6 +39,7 @@ class App extends Component {
             <Container fixLeft fixRight>
               <MainContent>
                 <Switch>
+                  <Route exact path="/" component={DashboardPage} />
                   <Route exact path="/text" component={TextPage} />
                   <Route exact path="/textfield" component={TextfieldPage} />
                 </Switch>
@@ -43,13 +50,13 @@ class App extends Component {
               {this.routeGroup.map((group, groupIndex) => {
                 return (
                   <React.Fragment key={groupIndex}>
-                    <Text
+                    {group.title && <Text
                       heading6
                       component="h3"
                       className={styles.sidebarTitle}
                     >
                       {group.title}
-                    </Text>
+                    </Text>}
                     {group.routes.map((route, routeIndex) => {
                       return (
                         <Link key={routeIndex} to={route.path}>
