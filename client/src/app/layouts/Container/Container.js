@@ -22,6 +22,9 @@ const Container = ({
         [styles.bleed]: bleed,
         [styles.fixLeft]: fixLeft,
         [styles.fixRight]: fixRight,
+        [styles.fixRight]: fixRight,
+        [styles.fixRight]: fixRight,
+        [styles.fixRight]: fixRight,
         [className]: className
       })}
     >

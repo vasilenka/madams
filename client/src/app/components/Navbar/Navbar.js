@@ -12,17 +12,10 @@ const Navbar = ({ className, ...restProps }) => {
     <div className={classnames(styles.root)}>
       <div className={classnames(styles.container)}>
         <div className={styles.brand}>
-          <Logo className={styles.logo} />
           <Text className={styles.name} heading4 component="h1">
             Madams
           </Text>
         </div>
-        <a
-          href="https://github.com/vasilenka/invoker"
-          className={styles.githubLink}
-        >
-          <Github className={styles.github} />
-        </a>
       </div>
     </div>
   );

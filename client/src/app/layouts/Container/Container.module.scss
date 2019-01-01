@@ -71,9 +71,7 @@
 }
 
 .fixLeft {
-  margin-left: 15vw;
-  padding-left: $space-ml;
-  padding-top: $space-ml;
+  margin-left: 16vw;
 }
 
 .fixRight {
@@ -84,6 +82,6 @@
     margin-right: 0;
   }
   @include screen(tabLandscape) {
-    margin-right: 25vw;
+    margin-right: 24vw;
   }
 }

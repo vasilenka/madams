@@ -1,7 +1,6 @@
 @import '~invoker-tokens/index.scss';
 
 .root {
-  height: 100%;
   overflow-y: scroll;
   @include screen(phone) {
     width: 0;
@@ -10,7 +9,7 @@
     width: 0;
   }
   @include screen(tabLandscape) {
-    width: 25vw;
+    width: 24vw;
   }
 }
 

@@ -6,6 +6,7 @@ import styles from './App.module.scss';
 
 import Container from './layouts/Container/Container';
 import LeftSection from './layouts/LeftSection/LeftSection';
+import RightSection from './layouts/RightSection/RightSection';
 import MainContent from './layouts/MainContent/MainContent';
 
 import Navbar from './components/Navbar/Navbar';
@@ -24,13 +25,13 @@ const client = new ApolloClient({
 class App extends Component {
   render() {
     return (
-      <div className={styles.root}>
-        <ApolloProvider client={client}>
-          <Navbar />
-          <Router>
-            <React.Fragment>
-              <Container fixLeft fixRight>
-                <MainContent>
+      <ApolloProvider client={client} className={styles.root}>
+        <Router>
+          <React.Fragment>
+            <Container fixLeft>
+              <Navbar />
+              <Container fixRight>
+                <MainContent className={styles.mainContent}>
                   <Switch>
                     <Route exact path="/" component={DashboardPage} />
                     <Route exact path="/text" component={TextPage} />
@@ -40,14 +41,17 @@ class App extends Component {
                   </Switch>
                 </MainContent>
               </Container>
+            </Container>
 
-              <LeftSection fixed className={styles.leftSection}>
-                <AppRoute />
-              </LeftSection>
-            </React.Fragment>
-          </Router>
-        </ApolloProvider>
-      </div>
+            <LeftSection fixed className={styles.leftSection}>
+              <AppRoute />
+            </LeftSection>
+            <RightSection fixed className={styles.rightSection}>
+              <p>This is the right section</p>
+            </RightSection>
+          </React.Fragment>
+        </Router>
+      </ApolloProvider>
     );
   }
 }

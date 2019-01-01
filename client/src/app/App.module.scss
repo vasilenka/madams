@@ -21,17 +21,22 @@
 }
 
 .leftSection {
-  top: 65px;
-  padding: $space-ml;
+  top: 0;
+  // background: #1d222f;
+  background: $brand-primary-200;
+  box-sizing: border-box;
 }
 
 .rightSection {
   top: 58px;
   border-left: 1px solid rgba(0, 0, 0, 0.06);
+  padding: $space-ml;
+  height: calc(100vh - 58px);
 }
 
 .link {
   display: block;
+  color: $light-alpha-100;
   padding: $space-vertical-s;
 }
 
@@ -39,4 +44,11 @@
   color: $dark-alpha-60;
   text-transform: uppercase;
   margin: $space-ml 0 $space-s 0;
+}
+
+.mainContent {
+  padding-left: $space-ml;
+  padding-top: $space-ml;
+  padding-right: $space-xl;
+  height: 100%;
 }

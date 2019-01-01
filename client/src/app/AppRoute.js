@@ -1,9 +1,12 @@
 import React from 'react';
 import styles from './App.module.scss';
 import { Link } from 'react-router-dom';
-import Text from './components/Text/Text';
 import { graphql } from 'react-apollo';
 import { gql } from 'apollo-boost';
+
+import Text from './components/Text/Text';
+import Brand from './components/Brand/Brand';
+import List from './components/List/List';
 
 const getDataQuery = gql`
   {
@@ -55,24 +58,36 @@ const AppRoute = props => {
 
   return (
     <React.Fragment>
-      {routeGroup.map((group, groupIndex) => {
-        return (
-          <React.Fragment key={groupIndex}>
-            {group.title && (
-              <Text heading6 component="h3" className={styles.sidebarTitle}>
-                {group.title}
-              </Text>
-            )}
-            {group.routes.map((route, routeIndex) => {
-              return (
-                <Link key={routeIndex} to={route.path}>
-                  <Text className={styles.link}>{route.name}</Text>
-                </Link>
-              );
-            })}
-          </React.Fragment>
-        );
-      })}
+      <Brand />
+      <div className={styles.list}>
+        {routeGroup.map((group, groupIndex) => {
+          return (
+            <React.Fragment key={groupIndex}>
+              {group.title && (
+                <List>
+                  <Text heading6 component="h3" className={styles.sidebarTitle}>
+                    {group.title}
+                  </Text>
+                </List>
+              )}
+              {group.routes.map((route, routeIndex) => {
+                return (
+                  <List>
+                    <Link key={routeIndex} to={route.path}>
+                      <Text truncate className={styles.link}>
+                        <Text small style={{ color: 'rgba(255,255,255,.40)' }}>
+                          #
+                        </Text>
+                        {route.name}
+                      </Text>
+                    </Link>
+                  </List>
+                );
+              })}
+            </React.Fragment>
+          );
+        })}
+      </div>
     </React.Fragment>
   );
 };
