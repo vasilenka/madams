@@ -13,6 +13,9 @@ const getDataQuery = gql`
     users {
       id
       username
+      email
+      firstName
+      lastName
     }
     projects {
       id
@@ -34,17 +37,17 @@ const AppRoute = props => {
       routes: [{ name: 'Dashboard', path: '/' }]
     },
     {
-      title: 'Meridians',
-      routes: users.map(user => ({
-        name: user.username,
-        path: `/users/${user.id}`
-      }))
-    },
-    {
       title: 'Projects',
       routes: projects.map(project => ({
         name: project.name,
         path: `/projects/${project.id}`
+      }))
+    },
+    {
+      title: 'Meridians',
+      routes: users.map(user => ({
+        name: user.username,
+        path: `/users/${user.id}`
       }))
     },
     {
@@ -57,38 +60,36 @@ const AppRoute = props => {
   ];
 
   return (
-    <React.Fragment>
+    <div>
       <Brand />
       <div className={styles.list}>
         {routeGroup.map((group, groupIndex) => {
           return (
-            <React.Fragment key={groupIndex}>
+            <div key={groupIndex} className={styles.sidebarSection}>
               {group.title && (
-                <List>
-                  <Text heading6 component="h3" className={styles.sidebarTitle}>
-                    {group.title}
-                  </Text>
-                </List>
+                <Text heading6 component="h3" className={styles.sidebarTitle}>
+                  {group.title}
+                </Text>
               )}
               {group.routes.map((route, routeIndex) => {
                 return (
-                  <List>
-                    <Link key={routeIndex} to={route.path}>
+                  <List key={routeIndex}>
+                    <Link to={route.path}>
                       <Text truncate className={styles.link}>
                         <Text small style={{ color: 'rgba(255,255,255,.40)' }}>
                           #
                         </Text>
-                        {route.name}
+                        {route.name.toLowerCase()}
                       </Text>
                     </Link>
                   </List>
                 );
               })}
-            </React.Fragment>
+            </div>
           );
         })}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

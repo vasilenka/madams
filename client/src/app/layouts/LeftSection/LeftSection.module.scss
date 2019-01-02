@@ -1,7 +1,8 @@
 @import '~invoker-tokens/index.scss';
 
 .root {
-  width: 16vw;
+  min-width: 216px;
+  width: 216px;
   overflow-y: scroll;
   height: 100%;
 }

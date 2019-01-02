@@ -1,5 +1,42 @@
 @import '~invoker-tokens/index.scss';
 
 .root {
-  padding: $space-sm;
+  cursor: pointer;
+  padding: $space-s $space-m;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: $brand-primary-200;
+  // background: #1d222f;
+  transition: all 0.36s;
+
+  &:hover {
+    transition: all 0.28s;
+    // background: #1d222f;
+    background: $brand-primary-100;
+  }
+}
+
+.companyName {
+  font-weight: 500;
+  color: $light-alpha-100;
+}
+
+.username {
+  color: $light-alpha-70;
+}
+
+.user {
+  display: inline-flex;
+  align-items: center;
+}
+
+.userStatus {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: $sys-warning-100;
+  margin: $space-inline-xs;
 }

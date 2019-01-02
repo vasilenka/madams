@@ -10,6 +10,8 @@ import RightSection from './layouts/RightSection/RightSection';
 import MainContent from './layouts/MainContent/MainContent';
 
 import Navbar from './components/Navbar/Navbar';
+import Brand from './components/Brand/Brand';
+import MenuContainer from './components/MenuContainer/MenuContainer';
 
 import AppRoute from './AppRoute';
 import TextfieldPage from './container/TextfieldPage/TextfieldPage';
@@ -48,7 +50,9 @@ class App extends Component {
             </LeftSection>
             <RightSection fixed className={styles.rightSection}>
               <p>This is the right section</p>
+              <Brand />
             </RightSection>
+            <MenuContainer />
           </React.Fragment>
         </Router>
       </ApolloProvider>

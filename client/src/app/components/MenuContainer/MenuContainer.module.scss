@@ -1,0 +1,17 @@
+@import '~invoker-tokens/index.scss';
+
+.root {
+  display: none;
+  position: absolute;
+  background: $light-alpha-100;
+  top: 58px;
+  left: 16px;
+  bottom: 48px;
+  max-width: 320px;
+  min-width: 280px;
+  border-radius: 3px;
+  box-shadow: 0px 12px 32px -12px rgba(0, 0, 0, 0.12);
+  padding: $space-inset-ml;
+  z-index: 99999999;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}

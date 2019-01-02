@@ -1,5 +1,11 @@
 @import '~invoker-tokens/index.scss';
 
 .root {
-  padding: $space-horizontal-sm;
+  padding: $space-horizontal-m;
+  transition: all 0.36s;
+
+  &:hover {
+    transition: all 0.28s;
+    background: rgba(255, 255, 255, 0.2);
+  }
 }

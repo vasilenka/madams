@@ -2,6 +2,7 @@
 
 .root {
   background: $light-alpha-100;
+  position: relative;
 }
 
 .greet {
@@ -36,19 +37,25 @@
 
 .link {
   display: block;
-  color: $light-alpha-100;
+  color: $light-alpha-70;
   padding: $space-vertical-s;
 }
 
 .sidebarTitle {
-  color: $dark-alpha-60;
+  color: $light-alpha-90;
   text-transform: uppercase;
-  margin: $space-ml 0 $space-s 0;
+  margin: $space-stack-s;
+  padding: $space-horizontal-m;
 }
 
 .mainContent {
   padding-left: $space-ml;
   padding-top: $space-ml;
   padding-right: $space-xl;
-  height: 100%;
+  min-height: calc(100vh - 58px);
+}
+
+.sidebarSection {
+  margin: $space-vertical-ml;
+  display: block;
 }
