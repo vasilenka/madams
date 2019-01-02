@@ -97,6 +97,7 @@ router.post('/', async (req, res, next) => {
     _id: new mongoose.Types.ObjectId(),
     ...pick(req.body, [
       'name',
+      'shortname',
       'from',
       'teams',
       'status',
@@ -114,6 +115,7 @@ router.post('/', async (req, res, next) => {
         project: pick(saved, [
           '_id',
           'name',
+          'shortname',
           'teams',
           'from',
           'tags',

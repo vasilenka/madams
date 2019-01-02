@@ -4,8 +4,9 @@ let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const projectSchema = mongoose.Schema({
   // _id: ObjectId,
-  from: {
+  shortname: {
     type: String,
+    required: true,
     lowercase: true
   },
   name: {

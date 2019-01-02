@@ -50,7 +50,6 @@ class App extends Component {
             </LeftSection>
             <RightSection fixed className={styles.rightSection}>
               <p>This is the right section</p>
-              <Brand />
             </RightSection>
             <MenuContainer />
           </React.Fragment>

@@ -8,6 +8,7 @@
   padding: $space-vertical-m;
   composes: container-bleed from global;
   z-index: 99999;
+  background: $light-alpha-100;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.08);
 }
 
