@@ -8,6 +8,8 @@ const {
   GraphQLList
 } = graphql;
 
+import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date';
+
 const AuthorType = require('./Author');
 
 const books = require('../dummy/books');
@@ -19,8 +21,8 @@ const ClientType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
-    createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString }
+    createdAt: { type: GraphQLDateTime },
+    updatedAt: { type: GraphQLDateTime }
     // author: {
     //   type: AuthorType,
     //   resolve(parent, args) {
