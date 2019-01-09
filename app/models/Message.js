@@ -3,7 +3,12 @@ const mongoose = require('mongoose');
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const messageSchema = mongoose.Schema({
-  sender: {
+  projectId: {
+    type: ObjectId,
+    ref: 'Project',
+    required: true
+  },
+  senderId: {
     type: ObjectId,
     ref: 'User',
     required: true

@@ -14,6 +14,7 @@ const {
 
 const User = require('./../../models/User');
 const Project = require('./../../models/Project');
+const Message = require('./../../models/Message');
 
 const UserType = new GraphQLObjectType({
   name: 'User',
@@ -29,11 +30,11 @@ const UserType = new GraphQLObjectType({
         parent.projects
           ? parent.projects.length > 0
             ? parent.projects.map(project => {
-                let query = { _id: project.id };
-                Project.find(query)
-                  .then(project => project)
-                  .catch(err => console.log(err));
-              })
+              let query = { _id: project.id };
+              Project.find(query)
+                .then(project => project)
+                .catch(err => console.log(err));
+            })
             : ''
           : '';
       }
@@ -55,9 +56,42 @@ const ProjectType = new GraphQLObjectType({
             .catch(err => console.log(err))
         );
       }
+    },
+    messages: {
+      type: new GraphQLList(MessageType),
+      resolve(parent, args) {
+        return Message.find({ projectId: parent.id })
+          .then(messages => messages)
+          .catch(err => console.log(err))
+      }
     }
   })
 });
+
+const MessageType = new GraphQLObjectType({
+  name: 'Message',
+  fields: () => ({
+    id: { type: GraphQLID },
+    body: { type: GraphQLString },
+    project: {
+      type: ProjectType,
+      resolve(parent, args) {
+        return Project.findById(parent.projectId)
+          .then(project => project)
+          .catch(err => console.log(err));
+      }
+    },
+    sender: {
+      type: UserType,
+      resolve(parent, args) {
+        return User.findById(parent.senderId)
+          .then(user => user)
+          .catch(err => console.log(err));
+      }
+    },
+    createdAt: { type: GraphQLString }
+  })
+})
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -136,6 +170,25 @@ const Mutation = new GraphQLObjectType({
         return project
           .save()
           .then(project => project)
+          .catch(err => console.log(err));
+      }
+    },
+    addMessage: {
+      type: MessageType,
+      args: {
+        body: { type: GraphQLString },
+        senderId: { type: GraphQLID },
+        projectId: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        let message = new Message({
+          body: args.body,
+          senderId: args.senderId,
+          projectId: args.projectId
+        });
+        return message
+          .save()
+          .then(message => message)
           .catch(err => console.log(err));
       }
     }
