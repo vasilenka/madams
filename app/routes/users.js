@@ -17,18 +17,22 @@ router.get('/', (req, res, next) => {
   User.find()
     .then(users => {
       res.status(200).json({
-        message: 'GET request to the /users',
-        count: users.length,
-        users: users.map(user => {
-          return {
-            ...user.toJSON(),
-            request: {
-              type: 'GET',
-              url: `http://localhost:5000/users/${user._id}`
-            }
-          };
-        })
+        message: 'Success',
+        users : users
       });
+      // res.status(200).json({
+      //   message: 'GET request to the /users',
+      //   count: users.length,
+      //   users: users.map(user => {
+      //     return {
+      //       ...user.toJSON(),
+      //       request: {
+      //         type: 'GET',
+      //         url: `http://localhost:5000/users/${user._id}`
+      //       }
+      //     };
+      //   })
+      // });
     })
     .catch(err => {
       res.status(500).send({
@@ -45,7 +49,7 @@ router.get('/:userId', (req, res, next) => {
         Promise.reject();
       }
       res.status(200).json({
-        message: 'GET request to /users/:id',
+        message: 'Success',
         user: user
       });
     })
@@ -65,7 +69,6 @@ router.post('/', checkEmail, hash, (req, res, next) => {
   }
 
   let user = new User({
-    _id: new mongoose.Types.ObjectId(),
     ...pick(req.body, [
       'email',
       'username',
@@ -82,15 +85,17 @@ router.post('/', checkEmail, hash, (req, res, next) => {
       if (!user) {
         return Promise.reject();
       }
-      return user.generateAuthToken();
+      req.body.token = user.generateToken();
+      return user//.generateAuthToken();
     })
-    .then(result => {
+    .then(user => {
       res
         .status(201)
-        .header('Authorization', result.token)
+        // .header('Authorization', result.token)
         .json({
           message: 'Success creating new user!',
-          user: result.user
+          token: req.body.token,
+          user: user
         });
     })
     .catch(err => {
@@ -101,7 +106,14 @@ router.post('/', checkEmail, hash, (req, res, next) => {
     });
 });
 
-router.patch('/:userId', tokenAuth, async (req, res, next) => {
+router.put('/:userId', tokenAuth, async (req, res, next) => {
+
+  if(req.currentUser.id !== req.params.userId) {
+    res.status(401).json({
+      message: 'Unauthorized'
+    })
+  }
+
   let props = pick(req.body, [
     'username',
     'password',
@@ -113,7 +125,7 @@ router.patch('/:userId', tokenAuth, async (req, res, next) => {
   if (props.password) {
     props.password = await bcrypt.hash(req.body.password, saltRounds);
   }
-  props.updatedAt = Date.now();
+  // props.updatedAt = Date.now();
   let query = req.params.userId;
 
   User.findByIdAndUpdate(query, { $set: props }, { new: true })
@@ -132,6 +144,13 @@ router.patch('/:userId', tokenAuth, async (req, res, next) => {
 });
 
 router.delete('/:userId', tokenAuth, (req, res, next) => {
+
+  if(req.currentUser.id !== req.params.userId) {
+    res.status(401).json({
+      message: 'Unauthorized'
+    })
+  }
+
   let query = req.params.userId;
 
   User.findByIdAndDelete(query)

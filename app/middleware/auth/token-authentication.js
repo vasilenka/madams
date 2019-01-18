@@ -17,12 +17,13 @@ let authenticate = (req, res, next) => {
       if (!user) {
         return Promise.reject();
       }
-      req.user = user;
+      req.currentUser = user;
       req.token = token;
+      console.log('currentUser', user);
       next();
     })
     .catch(err => {
-      return res.status(418).json({
+      return res.status(401).json({
         message: 'I am a teapot! 🍵',
         error: err
       });

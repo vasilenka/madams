@@ -6,7 +6,6 @@ const pick = require('lodash.pick');
 let ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userSchema = mongoose.Schema({
-  // _id: ObjectId,
   email: {
     type: String,
     required: true,
@@ -24,12 +23,6 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true
   },
-  // projects: [
-  //   {
-  //     type: ObjectId,
-  //     ref: 'Project'
-  //   }
-  // ],
   password: {
     minlength: [6, 'Password minimum length is 6 characters'],
     trim: true,
@@ -64,14 +57,14 @@ const userSchema = mongoose.Schema({
       trim: true
     }
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
+  // createdAt: {
+  //   type: Date,
+  //   default: Date.now
+  // },
+  // updatedAt: {
+  //   type: Date,
+  //   default: Date.now
+  // }
 });
 
 userSchema.methods.toJSON = function() {
@@ -136,6 +129,23 @@ userSchema.methods.isTokenExist = function() {
   return user;
 };
 
+userSchema.methods.generateToken = function() {
+  let user = this;
+  let access = 'auth';
+
+  let token = jwt.sign(
+    {
+      id: user.id,
+      access,
+      email: user.email,
+      username: user.username
+    },
+    process.env.SECRET_SAUCE
+  );
+
+  return token;
+};
+
 userSchema.statics.findByToken = function(token) {
   let User = this;
   let decoded;
@@ -146,43 +156,7 @@ userSchema.statics.findByToken = function(token) {
     return Promise.reject();
   }
 
-  return User.findOne({
-    _id: decoded._id,
-    'tokens.access': 'auth',
-    'tokens.token': token
-  });
+  return User.findById(decoded.id);
 };
-
-userSchema.statics.login = function({email, password}) {
-  return this.findOne({
-    email : email,
-    password : password
-
-  }).then(user => {
-    console.log(user);
-    let token = jwt.sign({
-      data: 'Hello World',
-      id: user.id,
-      email: user.email,
-    }, 'secret_sauce');
-    console.log(token);
-    return { token }
-
-  }).catch(err => null);
-}
-
-userSchema.statics.verify = function({token}) {
-  let decoded;
-
-  try {
-    decoded = jwt.verify(token, 'secret_sauce');
-  } catch (err) {
-    return null;
-  }
-
-  let user = this.findById(decoded.id);
-  if(user) return user;
-  else return null;
-}
 
 module.exports = mongoose.model('User', userSchema);

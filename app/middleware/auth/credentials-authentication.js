@@ -37,18 +37,18 @@ let authCredentials = async (req, res, next) => {
         });
       }
 
-      return user.isTokenExist();
+      return user//.isTokenExist();
     })
+    // .then(user => {
+    //   if (user.tokenExist) {
+    //     return res.status(406).json({
+    //       message: "You're already authenticate!"
+    //     });
+    //   }
+    //   return user.generateAuthToken();
+    // })
     .then(user => {
-      if (user.tokenExist) {
-        return res.status(406).json({
-          message: "You're already authenticate!"
-        });
-      }
-      return user.generateAuthToken();
-    })
-    .then(result => {
-      req.body.token = result.token;
+      req.body.token = user.generateToken();
       next();
     })
     .catch(err => {

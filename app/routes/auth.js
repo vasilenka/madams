@@ -19,11 +19,17 @@ router.post('/login', credentialsAuth, async (req, res, next) => {
   }
   res
     .status(200)
-    .header('Authorization', req.body.token)
+    // .header('Authorization', req.body.token)
     .json({
+      token: req.body.token,
       message: 'Authentication succeed!'
     });
 });
+
+router.get('/user', tokenAuth, async (req, res, next) => {
+  res.status(200)
+    .json(req.currentUser)
+})
 
 router.post('/logout', tokenAuth, (req, res, next) => {
   if (!req.user) {
