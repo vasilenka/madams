@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { graphql, compose } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import Header from '../../docs/Header/Header';
+import ProjectLog from './ProjectLog';
 
 const ProjectPage = props => {
   const [current, setCurrent] = useState(null);
@@ -47,7 +48,7 @@ const ProjectPage = props => {
         description={current ? current.id : ''}
       />
 
-      <ul>
+      {/* <ul>
         {(current ? current.messages : []).map(message => (
           <li key={message.id}>
             {message.sender.username} - {message.body}
@@ -69,7 +70,8 @@ const ProjectPage = props => {
         />
         <br />
         <button onClick={sendMessage}>Send</button>
-      </form>
+      </form> */}
+      <ProjectLog />
     </React.Fragment>
   );
 };

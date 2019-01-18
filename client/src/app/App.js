@@ -19,6 +19,8 @@ import TextPage from './container/TextPage/TextPage';
 import DashboardPage from './container/Dashboard/DashboardPage';
 import ProjectPage from './container/ProjectPage/ProjectPage';
 import UserPage from './container/UserPage/UserPage';
+import Login from './layouts/Auth/Login';
+import AuthenticationRoute from './layouts/Auth/AuthenticationRoute';
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/graphql'
@@ -29,34 +31,60 @@ class App extends Component {
     return (
       <ApolloProvider client={client} className={styles.root}>
         <Router>
-          <React.Fragment>
-            <Container fixLeft>
-              <Navbar />
-              <Container fixRight>
-                <MainContent className={styles.mainContent}>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route
+              path="/"
+              render={() => (
+                <MainLayout>
                   <Switch>
                     <Route exact path="/" component={DashboardPage} />
                     <Route exact path="/text" component={TextPage} />
                     <Route exact path="/textfield" component={TextfieldPage} />
-                    <Route exact path="/projects/:id" component={ProjectPage} />
                     <Route exact path="/users/:id" component={UserPage} />
+                    <Route
+                      path="/"
+                      render={props => (
+                        <AuthenticationRoute {...props}>
+                          <Route
+                            exact
+                            path="/projects/:id"
+                            component={ProjectPage}
+                          />
+                        </AuthenticationRoute>
+                      )}
+                    />
                   </Switch>
-                </MainContent>
-              </Container>
-            </Container>
-
-            <LeftSection fixed className={styles.leftSection}>
-              <AppRoute />
-            </LeftSection>
-            <RightSection fixed className={styles.rightSection}>
-              <p>This is the right section</p>
-            </RightSection>
-            <MenuContainer />
-          </React.Fragment>
+                </MainLayout>
+              )}
+            />
+          </Switch>
         </Router>
       </ApolloProvider>
     );
   }
 }
+
+const MainLayout = ({ children }) => {
+  return (
+    <React.Fragment>
+      <Container fixLeft>
+        <Navbar />
+        <Container fixRight>
+          <MainContent className={styles.mainContent}>{children}</MainContent>
+        </Container>
+      </Container>
+
+      <LeftSection fixed className={styles.leftSection}>
+        <AppRoute />
+      </LeftSection>
+
+      <RightSection fixed className={styles.rightSection}>
+        <p>This is the right section</p>
+      </RightSection>
+      <MenuContainer />
+    </React.Fragment>
+  );
+};
 
 export default App;

@@ -38,10 +38,17 @@ const AppRoute = props => {
     },
     {
       title: 'Projects',
-      routes: projects.map(project => ({
-        name: project.name,
-        path: `/projects/${project.id}`
-      }))
+      routes: projects
+        .map(project => ({
+          name: project.name,
+          path: `/projects/${project.id}`
+        }))
+        .concat([
+          {
+            name: 'TestProject',
+            path: `/projects/testproject`
+          }
+        ])
     },
     {
       title: 'Meridians',

@@ -42,6 +42,13 @@ const UserType = new GraphQLObjectType({
   })
 });
 
+const TokenType = new GraphQLObjectType({
+  name: 'Token',
+  fields: () => ({
+    token: { type: GraphQLString }
+  })
+})
+
 const ProjectType = new GraphQLObjectType({
   name: 'Project',
   fields: () => ({
@@ -96,6 +103,17 @@ const MessageType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    verify: {
+      type: UserType,
+      args: {
+        token: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        return User.verify({
+          token: args.token
+        })
+      }
+    },
     users: {
       type: new GraphQLList(UserType),
       resolve(parent, args) {
@@ -136,26 +154,45 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
+    login: {
+      type: TokenType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString }
+      },
+      resolve(parent, args) {
+        return User.login({
+          email: args.email,
+          password: args.password
+        });
+      }
+    },
+
     addUser: {
       type: UserType,
       args: {
-        username: { type: GraphQLString },
         email: { type: GraphQLString },
-        projects: { type: GraphQLList(GraphQLString) }
+        username: { type: GraphQLString },
+        password: { type: GraphQLString },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
       },
       resolve(parent, args) {
         let user = new User({
-          username: args.username,
           email: args.email,
-          projects: args.projects
+          username: args.username,
+          password: args.password,
+          firstName: args.firstName,
+          lastName: args.lastName,
+          role: []
         });
-
         return user
           .save()
           .then(user => user)
           .catch(err => console.log('Error: ', err));
       }
     },
+
     addProject: {
       type: ProjectType,
       args: {
@@ -173,6 +210,7 @@ const Mutation = new GraphQLObjectType({
           .catch(err => console.log(err));
       }
     },
+
     addMessage: {
       type: MessageType,
       args: {

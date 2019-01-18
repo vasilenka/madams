@@ -24,16 +24,16 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true
   },
-  projects: [
-    {
-      type: ObjectId,
-      ref: 'Project'
-    }
-  ],
+  // projects: [
+  //   {
+  //     type: ObjectId,
+  //     ref: 'Project'
+  //   }
+  // ],
   password: {
-    minlength: [8, 'Password minimum length is 8 characters'],
+    minlength: [6, 'Password minimum length is 6 characters'],
     trim: true,
-    // required: true,
+    required: true,
     type: String
   },
   firstName: {
@@ -152,5 +152,37 @@ userSchema.statics.findByToken = function(token) {
     'tokens.token': token
   });
 };
+
+userSchema.statics.login = function({email, password}) {
+  return this.findOne({
+    email : email,
+    password : password
+
+  }).then(user => {
+    console.log(user);
+    let token = jwt.sign({
+      data: 'Hello World',
+      id: user.id,
+      email: user.email,
+    }, 'secret_sauce');
+    console.log(token);
+    return { token }
+
+  }).catch(err => null);
+}
+
+userSchema.statics.verify = function({token}) {
+  let decoded;
+
+  try {
+    decoded = jwt.verify(token, 'secret_sauce');
+  } catch (err) {
+    return null;
+  }
+
+  let user = this.findById(decoded.id);
+  if(user) return user;
+  else return null;
+}
 
 module.exports = mongoose.model('User', userSchema);
