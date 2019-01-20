@@ -5,7 +5,9 @@ let User = require('../../models/User');
 
 let authenticate = (req, res, next) => {
   if (!req.header('Authorization')) {
-    return res.status(400).json();
+    return res.status(400).json({
+      message: 'Authorization token is not available',
+    });
   }
 
   let token = req
@@ -19,7 +21,6 @@ let authenticate = (req, res, next) => {
       }
       req.currentUser = user;
       req.token = token;
-      console.log('currentUser', user);
       next();
     })
     .catch(err => {

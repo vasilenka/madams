@@ -13,7 +13,7 @@ let router = express.Router();
 
 let User = require('./../models/User');
 
-router.get('/', (req, res, next) => {
+router.get('/', tokenAuth, (req, res, next) => {
   User.find()
     .then(users => {
       res.status(200).json({
@@ -42,7 +42,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:userId', (req, res, next) => {
+router.get('/:userId', tokenAuth, (req, res, next) => {
   User.findById(req.params.userId)
     .then(user => {
       if (!user) {
@@ -61,7 +61,7 @@ router.get('/:userId', (req, res, next) => {
     });
 });
 
-router.post('/', checkEmail, hash, (req, res, next) => {
+router.post('/', tokenAuth, checkEmail, hash, (req, res, next) => {
   if (req.body.emailExist) {
     return res.status(409).json({
       message: `User already exist`
