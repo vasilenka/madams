@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
 import styles from './App.module.scss';
+import { Provider } from 'react-redux';
 
 import Container from './layouts/Container/Container';
 import LeftSection from './layouts/LeftSection/LeftSection';
@@ -10,7 +9,6 @@ import RightSection from './layouts/RightSection/RightSection';
 import MainContent from './layouts/MainContent/MainContent';
 
 import Navbar from './components/Navbar/Navbar';
-import Brand from './components/Brand/Brand';
 import MenuContainer from './components/MenuContainer/MenuContainer';
 
 import AppRoute from './AppRoute';
@@ -21,15 +19,12 @@ import ProjectPage from './container/ProjectPage/ProjectPage';
 import UserPage from './container/UserPage/UserPage';
 import Login from './layouts/Auth/Login';
 import AuthenticationRoute from './layouts/Auth/AuthenticationRoute';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql'
-});
+import store from './reducers';
 
 class App extends Component {
   render() {
     return (
-      <ApolloProvider client={client} className={styles.root}>
+      <Provider store={store}>
         <Router>
           <Switch>
             <Route exact path="/login" component={Login} />
@@ -60,7 +55,7 @@ class App extends Component {
             />
           </Switch>
         </Router>
-      </ApolloProvider>
+      </Provider>
     );
   }
 }

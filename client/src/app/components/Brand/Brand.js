@@ -1,9 +1,9 @@
 import styles from './Brand.module.scss';
 import React from 'react';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 
 import Text from './../Text/Text';
-import DropdownContainer from './../DropdownContainer/DropdownContainer';
+// import DropdownContainer from './../DropdownContainer/DropdownContainer';
 
 const Brand = ({ className, ...restProps }) => {
   return (

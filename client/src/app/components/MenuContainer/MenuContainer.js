@@ -1,6 +1,6 @@
 import styles from './MenuContainer.module.scss';
 import React, { Component } from 'react';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 
 class MenuContainer extends Component {
   render() {

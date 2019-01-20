@@ -1,5 +1,5 @@
 import styles from './Navbar.module.scss';
-import React, { useEffect, useState } from 'react';
+import React, { } from 'react';
 import classnames from 'classnames';
 
 import Text from '../Text/Text';

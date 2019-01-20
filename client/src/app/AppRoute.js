@@ -1,36 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './App.module.scss';
 import { Link } from 'react-router-dom';
-import { graphql } from 'react-apollo';
-import { gql } from 'apollo-boost';
+import { connect } from 'react-redux';
 
 import Text from './components/Text/Text';
 import Brand from './components/Brand/Brand';
 import List from './components/List/List';
 
-const getDataQuery = gql`
-  {
-    users {
-      id
-      username
-      email
-      firstName
-      lastName
-    }
-    projects {
-      id
-      name
-    }
-  }
-`;
+import { projectAll } from './actions/ProjectAction';
+import { userAll } from './actions/UserAction';
 
 const AppRoute = props => {
-  let users = [];
-  let projects = [];
-  if (!props.data.loading && !props.data.error) {
-    users = props.data.users || [];
-    projects = props.data.projects || [];
-  }
+  let users = props.users.list;
+  let projects = props.projects.list;
+
+  console.log(props);
+
+  useEffect(
+    () => {
+      props.project.all();
+      props.user.all();
+    }, []
+  )
 
   const routeGroup = [
     {
@@ -43,12 +34,6 @@ const AppRoute = props => {
           name: project.name,
           path: `/projects/${project.id}`
         }))
-        .concat([
-          {
-            name: 'TestProject',
-            path: `/projects/testproject`
-          }
-        ])
     },
     {
       title: 'Meridians',
@@ -100,4 +85,22 @@ const AppRoute = props => {
   );
 };
 
-export default graphql(getDataQuery)(AppRoute);
+const mapStateToProps = (state, ownState) => {
+  return {
+    projects: state.projects,
+    users: state.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    project : {
+      all : projectAll(dispatch)
+    },
+    user : {
+      all : userAll(dispatch)
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppRoute);

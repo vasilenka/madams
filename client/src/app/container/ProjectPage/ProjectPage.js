@@ -6,8 +6,8 @@ import ProjectLog from './ProjectLog';
 
 const ProjectPage = props => {
   const [current, setCurrent] = useState(null);
-  const [msgBody, setMsgBody] = useState('');
-  const [senderId, setSenderId] = useState('');
+  // const [msgBody, setMsgBody] = useState('');
+  // const [senderId, setSenderId] = useState('');
 
   useEffect(
     () => {
@@ -18,28 +18,28 @@ const ProjectPage = props => {
     [props.data]
   );
 
-  async function sendMessage(e) {
-    e.preventDefault();
-    if (!current) return;
-    if (!msgBody || !senderId) return;
-    await props.addMessageMutation({
-      variables: {
-        body: msgBody,
-        senderId: senderId,
-        projectId: current.id
-      },
-      refetchQueries: [
-        {
-          query: getProjectQuery,
-          variables: {
-            id: props.match.params.id
-          }
-        }
-      ]
-    });
-    setMsgBody('');
-    setSenderId('');
-  }
+  // async function sendMessage(e) {
+  //   e.preventDefault();
+  //   if (!current) return;
+  //   if (!msgBody || !senderId) return;
+  //   await props.addMessageMutation({
+  //     variables: {
+  //       body: msgBody,
+  //       senderId: senderId,
+  //       projectId: current.id
+  //     },
+  //     refetchQueries: [
+  //       {
+  //         query: getProjectQuery,
+  //         variables: {
+  //           id: props.match.params.id
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   setMsgBody('');
+  //   setSenderId('');
+  // }
 
   return (
     <React.Fragment>
